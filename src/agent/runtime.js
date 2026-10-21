@@ -14,16 +14,16 @@ function getClient() {
 }
 
 function normalizeHistory(history, message) {
-  if (!Array.isArray(history)) return [{ role: "user", parts: [{ text: message }] }];
-
-  const safeHistory = history
-    .filter((item) => item && ["user", "assistant", "model"].includes(item.role))
-    .map((item) => ({
-      role: item.role === "assistant" ? "model" : item.role,
-      text: typeof item.content === "string" ? item.content : typeof item.text === "string" ? item.text : ""
-    }))
-    .filter((item) => item.text.trim())
-    .slice(-MAX_HISTORY_MESSAGES);
+  const safeHistory = Array.isArray(history)
+    ? history
+        .filter((item) => item && ["user", "assistant", "model"].includes(item.role))
+        .map((item) => ({
+          role: item.role === "assistant" ? "model" : item.role,
+          text: typeof item.content === "string" ? item.content : typeof item.text === "string" ? item.text : ""
+        }))
+        .filter((item) => item.text.trim())
+        .slice(-MAX_HISTORY_MESSAGES)
+    : [];
 
   let total = 0;
   const bounded = [];
@@ -48,9 +48,7 @@ export async function runXBO({ message, history = [], onDelta } = {}) {
   }
 
   const ai = getClient();
-  const model = process.env.DEFAULT_MODEL && process.env.DEFAULT_MODEL !== "zsk"
-    ? process.env.DEFAULT_MODEL
-    : "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const contents = normalizeHistory(history, prompt);
   const stream = await ai.models.generateContentStream({
     model,
