@@ -6,7 +6,7 @@
 <h1 align="center">X-BO</h1>
 
 <p align="center">
-  <img src="assets/xbo-panda.gif" width="160" alt="X-BO Panda Mascot">
+  <img src="assets/xbo3.png" width="160" alt="X-BO Panda Mascot">
 </p>
 
 <p align="center">
