@@ -6,10 +6,6 @@
 <h1 align="center">X-BO</h1>
 
 <p align="center">
-  <img src="assets/xbo2.png" width="160" alt="X-BO Panda Mascot">
-</p>
-
-<p align="center">
   <strong>One chat. More ways to get work done.</strong>
 </p>
 
