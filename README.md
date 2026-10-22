@@ -1,4 +1,18 @@
-# X-BO
+
+<p align="center">
+  <img src="assets/xbo3.png" width="180" alt="X-BO Bot">
+</p>
+
+<h1 align="center">X-BO</h1>
+
+<p align="center">
+  <img src="assets/xbo-panda.gif" width="160" alt="X-BO Panda Mascot">
+</p>
+
+<p align="center">
+  <strong>One chat. More ways to get work done.</strong>
+</p>
+
 
 <p align="center">
   <strong>One chat. More ways to get work done.</strong><br />
