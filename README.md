@@ -3,7 +3,7 @@
   <img src="assets/xbo3.png" width="180" alt="X-BO Bot">
 </p>
 
-<h1 align="center">X-BO</h1>
+<h1 align="center">X-BO Bot</h1>
 
 <p align="center">
   <strong>One chat. More ways to get work done.</strong>
