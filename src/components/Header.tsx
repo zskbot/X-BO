@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onManualSync}
             className="p-1.5 bg-black hover:bg-neutral-900 text-white rounded-none border-2 border-neutral-700 hover:border-neutral-500 transition-all cursor-pointer active:scale-95"
-            title="Đồng bộ Cloudant"
+            title="Kiểm tra trạng thái đồng bộ"
           >
             <Archive className="w-4 h-4 text-neutral-300" />
           </button>
@@ -127,7 +127,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onOpenNotifications}
             className="relative p-1.5 bg-black hover:bg-neutral-900 text-white rounded-none border-2 border-neutral-700 hover:border-neutral-500 transition-all cursor-pointer active:scale-95"
-            title="Chia sẻ / Thông báo"
+            title="Thông báo"
           >
             <Share2 className="w-4 h-4 text-neutral-300" />
             {unreadCount > 0 && (
