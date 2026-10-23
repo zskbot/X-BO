@@ -60,14 +60,3 @@
     "vite": "^8.2.0"
   }
 }
-{
-  "name": "x-bo",
-  "version": "2.0.0",
-  "private": true,
-  "description": "X-BO: chatbot agent. Giao diện HTML/CSS/JS thuần, API Node không cần thư viện.",
-  "engines": { "node": ">=20" },
-  "scripts": {
-    "start": "node --env-file=.env server.js",
-    "dev": "node --env-file=.env --watch server.js"
-  }
-}
