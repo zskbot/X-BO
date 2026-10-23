@@ -5,6 +5,9 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    // GitHub Pages publishes this project at /X-BO/, not at the domain root.
+    // VITE_BASE_PATH can be overridden for previews or other hosting providers.
+    base: process.env.VITE_BASE_PATH || '/X-BO/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
@@ -12,10 +15,7 @@ export default defineConfig(() => {
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
       proxy: {
         '/v1': {
@@ -32,8 +32,8 @@ export default defineConfig(() => {
           target: 'http://localhost:3000',
           changeOrigin: true,
           secure: false,
-        }
-      }
+        },
+      },
     },
   };
 });
