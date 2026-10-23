@@ -1,0 +1,87 @@
+:root {
+  --bg: #0a141c;
+  --panel: #0f1e2a;
+  --line: #22313f;
+  --text: #e6edf3;
+  --muted: #8fa1b3;
+  --accent: #4589ff;
+  --danger: #ff7b72;
+  --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  box-sizing: border-box;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; border-radius: 0; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--text); font: 400 16px/1.6 var(--sans); }
+button, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app { display: grid; grid-template-columns: 272px 1fr; height: 100dvh; }
+
+/* Sidebar */
+.side { display: flex; flex-direction: column; background: var(--panel); border-right: 1px solid var(--line); min-height: 0; }
+.brand { padding: 20px 20px 12px; font-size: 28px; font-weight: 700; letter-spacing: -0.04em; }
+.new { margin: 0 16px 12px; padding: 10px 12px; text-align: left; background: var(--accent); border: 0; color: #fff; font-weight: 500; }
+.list { flex: 1; overflow-y: auto; padding: 0 0 16px; }
+.item { display: flex; border-left: 2px solid transparent; }
+.item.on { border-left-color: var(--accent); background: rgba(69, 137, 255, 0.1); }
+.pick { flex: 1; min-width: 0; padding: 10px 16px; text-align: left; background: none; border: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.del { padding: 0 12px; background: none; border: 0; color: var(--muted); font-size: 13px; }
+.del:hover { color: var(--danger); }
+
+/* Main */
+.main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.top { display: none; align-items: center; gap: 12px; padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px; border-bottom: 1px solid var(--line); }
+.burger { background: none; border: 1px solid var(--line); padding: 6px 10px; }
+.title { font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.feed { flex: 1; overflow-y: auto; padding: 24px 20px; }
+.msg { max-width: 72ch; margin: 0 auto 24px; }
+.msg.user { background: var(--panel); border-left: 2px solid var(--muted); padding: 10px 14px; }
+.msg.user p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.bot > :first-child { margin-top: 0; }
+.bot p, .bot ul { margin: 0 0 12px; }
+.bot ul { padding-left: 22px; }
+.bot h3, .bot h4 { margin: 18px 0 8px; line-height: 1.3; }
+.bot pre { background: var(--panel); border: 1px solid var(--line); padding: 12px; overflow-x: auto; font: 400 14px/1.5 var(--mono); }
+.bot code { font-family: var(--mono); font-size: 0.9em; }
+.bot a { color: var(--accent); overflow-wrap: anywhere; }
+.think { color: var(--muted); }
+.err { color: var(--danger); }
+
+/* Nhật ký các bước agent */
+.trace { list-style: none; margin: 0 0 14px; padding: 0 0 0 14px; border-left: 2px solid var(--accent); font: 400 13px/1.5 var(--mono); color: var(--muted); }
+.trace li { display: flex; gap: 12px; justify-content: space-between; padding: 2px 0; }
+.trace .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trace .sum { flex: none; }
+.trace li.done .sum { color: var(--text); }
+.sources { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.sources a { max-width: 100%; padding: 4px 10px; border: 1px solid var(--line); color: var(--muted); font-size: 13px; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sources a:hover { color: var(--text); border-color: var(--muted); }
+
+/* Trang trống */
+.empty { max-width: 72ch; margin: 8vh auto 0; }
+.empty h1 { margin: 0 0 8px; font-size: clamp(56px, 14vw, 120px); line-height: 0.95; font-weight: 700; letter-spacing: -0.06em; }
+.empty p { margin: 0 0 24px; color: var(--muted); max-width: 46ch; }
+.sugs { display: grid; gap: 8px; }
+.sugs button { padding: 12px 14px; text-align: left; background: var(--panel); border: 1px solid var(--line); }
+.sugs button:hover { border-color: var(--accent); }
+
+/* Ô nhập */
+.composer { display: flex; gap: 8px; padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: var(--bg); }
+.composer textarea { flex: 1; min-width: 0; max-height: 160px; resize: none; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line); }
+.go { padding: 0 20px; background: var(--accent); border: 0; color: #fff; font-weight: 500; }
+.go:disabled { opacity: 0.4; cursor: not-allowed; }
+.go.stop { background: var(--panel); border: 1px solid var(--line); color: var(--text); }
+
+/* Điện thoại */
+.scrim { display: none; }
+@media (max-width: 760px) {
+  .app { grid-template-columns: 1fr; }
+  .top { display: flex; }
+  .side { position: fixed; inset: 0 auto 0 0; width: min(84vw, 320px); z-index: 20; transform: translateX(-100%); transition: transform 0.18s ease-out; padding-top: env(safe-area-inset-top, 0px); }
+  .side.open { transform: none; }
+  .scrim.show { display: block; position: fixed; inset: 0; z-index: 10; background: rgba(0, 0, 0, 0.55); }
+}
+@media (prefers-reduced-motion: reduce) { .side { transition: none; } }
