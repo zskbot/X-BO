@@ -47,7 +47,9 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
     setStatus(null);
 
     try {
-      const response = await fetch('/api/chat', {
+      const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+      const response = await fetch(`${apiBase}/api/chat`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -56,7 +58,8 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
 
       if (!response.ok) {
         const errText = await response.text();
-        throw new Error(errText || `API trả về HTTP ${response.status}. Kiểm tra backend và cấu hình provider.`);
+        const detail = errText.trim().slice(0, 500);
+        throw new Error(detail || `API trả về HTTP ${response.status}. Kiểm tra backend và cấu hình provider.`);
       }
 
       const data = await response.json();
