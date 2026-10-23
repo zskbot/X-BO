@@ -26,13 +26,13 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'system',
-      content: 'ZsK AI Free Agent đã sẵn sàng. Chọn provider và gửi câu hỏi của bạn.'
+      content: 'X-BO sẵn sàng nhận yêu cầu. Chọn provider đã được cấu hình để bắt đầu.'
     }
   ]);
   const [input, setInput] = useState('');
   const [status, setStatus] = useState<{ type: 'info' | 'error'; text: string } | null>({
     type: 'info',
-    text: 'Mô hình local zsk đang chạy miễn phí. Đổi sang ohmaba nếu bạn có endpoint custom.'
+    text: 'Backend chưa được xác minh từ giao diện tĩnh. Cần API server và provider credentials để nhận phản hồi.'
   });
   const [isSending, setIsSending] = useState(false);
 
@@ -56,16 +56,16 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
 
       if (!response.ok) {
         const errText = await response.text();
-        throw new Error(errText || `HTTP ${response.status}`);
+        throw new Error(errText || `API trả về HTTP ${response.status}. Kiểm tra backend và cấu hình provider.`);
       }
 
       const data = await response.json();
-      const content = data.response || data.result || 'No response returned.';
+      const content = data.response || data.result || 'API đã phản hồi nhưng không có nội dung.';
       setMessages(prev => [...prev, { role: 'assistant', content }]);
       setStatus({ type: 'info', text: 'Đã nhận phản hồi từ agent.' });
     } catch (err) {
       setStatus({ type: 'error', text: err instanceof Error ? err.message : 'Lỗi khi gọi agent.' });
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Lỗi: không thể nhận phản hồi từ agent.' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Không thể nhận phản hồi từ agent. Kiểm tra API server và cấu hình provider.' }]);
     } finally {
       setIsSending(false);
     }
@@ -82,7 +82,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#020409]">
       <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-neutral-800 bg-black">
         <div>
-          <div className="text-xs uppercase tracking-[0.3em] text-cyan-300 font-bold">ZsK AI Chat</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-cyan-300 font-bold">X-BO AI Workspace</div>
           <div className="text-[11px] text-neutral-400">Chọn provider và bắt đầu chat ngay.</div>
         </div>
         <div className="flex items-center gap-2">
@@ -140,7 +140,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Nhập câu hỏi của bạn vào đây..."
+            placeholder="Nhập yêu cầu cho X-BO AI Agent..."
             className="min-h-[96px] w-full resize-none rounded-none border border-neutral-700 bg-[#06080F] px-3 py-3 text-sm text-white outline-none focus:border-cyan-400"
           />
           <button
