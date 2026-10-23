@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <title>X-BO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="side" id="side">
+        <div class="brand">X-BO</div>
+        <button class="new" id="newChat">Cuộc trò chuyện mới</button>
+        <nav class="list" id="list" aria-label="Lịch sử chat"></nav>
+      </aside>
+      <div class="scrim" id="scrim"></div>
+
+      <main class="main">
+        <header class="top">
+          <button class="burger" id="burger" aria-label="Mở danh sách chat">Chats</button>
+          <span class="title" id="title">X-BO</span>
+        </header>
+
+        <div class="feed" id="feed"></div>
+
+        <div class="composer">
+          <textarea id="input" rows="1" placeholder="Nhắn cho X-BO"></textarea>
+          <button class="go" id="go">Gửi</button>
+        </div>
+      </main>
+    </div>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
