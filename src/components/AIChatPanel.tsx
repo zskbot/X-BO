@@ -48,7 +48,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
 
     try {
       const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
-      const response = await fetch(`${apiBase}/api/chat`, {
+      const response = await fetch(`${apiBase}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
