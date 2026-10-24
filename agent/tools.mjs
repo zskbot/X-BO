@@ -71,6 +71,11 @@ function isPrivate(ip) {
     value.startsWith('2002:') || value.startsWith('3fff:');
 }
 
+export function tlsServername(hostname) {
+  const normalized = hostname.replaceAll('[', '').replaceAll(']', '');
+  return net.isIP(normalized) ? undefined : hostname;
+}
+
 function requestPinned(url, address) {
   const transport = url.protocol === 'https:' ? https : http;
   return new Promise((resolve, reject) => {
@@ -81,7 +86,7 @@ function requestPinned(url, address) {
         if (options?.all) callback(null, [{ address, family: net.isIPv6(address) ? 6 : 4 }]);
         else callback(null, address, net.isIPv6(address) ? 6 : 4);
       },
-      servername: net.isIP(url.hostname.replace(/^\\[|\\]$/g, '')) ? undefined : url.hostname,
+      servername: tlsServername(url.hostname),
     }, (response) => {
       const chunks = [];
       let size = 0;
