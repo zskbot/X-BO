@@ -1,5 +1,7 @@
 import dns from 'node:dns/promises';
 import net from 'node:net';
+import http from 'node:http';
+import https from 'node:https';
 
 export const toolDeclarations = [
   { name: 'web_search', description: 'Tìm thông tin mới trên web. Trả về danh sách kết quả kèm trích đoạn.', parameters: { type: 'OBJECT', properties: { query: { type: 'STRING', description: 'Từ khóa tìm kiếm, ngắn gọn' } }, required: ['query'] } },
@@ -50,21 +52,61 @@ function isPrivate(ip) {
   return value === '::' || value === '::1' || value.startsWith('fc') || value.startsWith('fd') || value.startsWith('fe80') || value.startsWith('::ffff:');
 }
 
+function requestPinned(url, address) {
+  const transport = url.protocol === 'https:' ? https : http;
+  return new Promise((resolve, reject) => {
+    const request = transport.request(url, {
+      method: 'GET',
+      headers: { 'User-Agent': 'X-BO/1.0 (+chatbot)', Accept: 'text/html,text/plain,application/xhtml+xml' },
+      lookup: (_hostname, options, callback) => {
+        if (options?.all) callback(null, [{ address, family: net.isIPv6(address) ? 6 : 4 }]);
+        else callback(null, address, net.isIPv6(address) ? 6 : 4);
+      },
+      servername: url.hostname,
+    }, (response) => {
+      const chunks = [];
+      let size = 0;
+      response.on('data', (chunk) => {
+        size += chunk.length;
+        if (size > 500000) {
+          request.destroy(new Error('Phản hồi vượt quá giới hạn'));
+          return;
+        }
+        chunks.push(chunk);
+      });
+      response.on('end', () => resolve({
+        statusCode: response.statusCode ?? 0,
+        headers: response.headers,
+        body: Buffer.concat(chunks).toString('utf8'),
+      }));
+      response.on('error', reject);
+    });
+    request.setTimeout(10000, () => request.destroy(new Error('Hết thời gian chờ')));
+    request.on('error', reject);
+    request.end();
+  });
+}
+
 async function readUrl(input) {
-  let url = new URL(input);
+  let url;
+  try { url = new URL(input); } catch { throw new Error('URL không hợp lệ'); }
   for (let hop = 0; hop <= 3; hop += 1) {
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('URL không hợp lệ');
-    const addresses = await dns.lookup(url.hostname, { all: true });
+    if (url.port && url.port !== (url.protocol === 'https:' ? '443' : '80')) throw new Error('Cổng không được phép');
+    const addresses = net.isIP(url.hostname)
+      ? [{ address: url.hostname }]
+      : await dns.lookup(url.hostname, { all: true, verbatim: true });
     if (!addresses.length || addresses.some(({ address }) => isPrivate(address))) throw new Error('Địa chỉ nội bộ bị chặn');
-    const response = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(10000), headers: { 'User-Agent': 'X-BO/1.0 (+chatbot)' } });
-    const location = response.headers.get('location');
-    if (response.status >= 300 && response.status < 400 && location) {
+    // Pin the validated address into the socket lookup callback to prevent DNS rebinding.
+    const response = await requestPinned(url, addresses[0].address);
+    const location = response.headers.location;
+    if (response.statusCode >= 300 && response.statusCode < 400 && location) {
       if (hop === 3) throw new Error('Quá nhiều chuyển hướng');
       url = new URL(location, url);
       continue;
     }
-    if (!response.ok) throw new Error('Trang web trả lỗi');
-    const html = (await response.text()).slice(0, 500000);
+    if (response.statusCode < 200 || response.statusCode >= 300) throw new Error('Trang web trả lỗi');
+    const html = response.body;
     const title = /<title[^>]*>([\s\S]*?)<\/title>/i.exec(html)?.[1]?.trim() ?? url.toString();
     const text = html.replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim().slice(0, 8000);
     return { output: { title, text }, summary: `${text.length} ký tự`, sources: [{ title, url: url.toString() }] };
@@ -115,4 +157,4 @@ function calculator(expression) {
   return { output: result, summary: `= ${result}` };
 }
 
-export { calculator };
+export { calculator, readUrl };
