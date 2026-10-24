@@ -36,5 +36,7 @@ describe("TLS server name selection", () => {
   it("preserves DNS hostnames for TLS SNI", () => {
     expect(tlsServername("example.com")).toBe("example.com");
     expect(tlsServername("foo[bar]")).toBe("foo[bar]");
+    expect(tlsServername("[foo")).toBe("[foo");
+    expect(tlsServername("foo]")).toBe("foo]");
   });
 });

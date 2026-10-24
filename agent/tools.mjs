@@ -71,8 +71,14 @@ function isPrivate(ip) {
     value.startsWith('2002:') || value.startsWith('3fff:');
 }
 
+function normalizeHostnameBrackets(hostname) {
+  return hostname.startsWith('[') && hostname.endsWith(']')
+    ? hostname.slice(1, -1)
+    : hostname;
+}
+
 export function tlsServername(hostname) {
-  const normalized = hostname.replace(/^\[|\]$/g, '');
+  const normalized = normalizeHostnameBrackets(hostname);
   return net.isIP(normalized) ? undefined : hostname;
 }
 
@@ -118,7 +124,7 @@ async function readUrl(input) {
   for (let hop = 0; hop <= 3; hop += 1) {
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('URL không hợp lệ');
     if (url.port && url.port !== (url.protocol === 'https:' ? '443' : '80')) throw new Error('Cổng không được phép');
-    const hostname = url.hostname.replace(/^\[|\]$/g, '');
+    const hostname = normalizeHostnameBrackets(url.hostname);
     const addresses = net.isIP(hostname)
       ? [{ address: hostname }]
       : await dns.lookup(hostname, { all: true, verbatim: true });
