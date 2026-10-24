@@ -97,7 +97,8 @@ function isPrivate(ip) {
   // Only allow IPv6 global-unicast space (2000::/3), and reject special-purpose
   // ranges even when their textual representation uses expanded hextets.
   if (!/^[23]/.test(value)) return true;
-  return ipv6InCidr(value, '2001:db8::', 32) ||
+  return ipv6InCidr(value, '2001::', 23) ||
+    ipv6InCidr(value, '2001:db8::', 32) ||
     ipv6InCidr(value, '2001:2::', 48) ||
     ipv6InCidr(value, '2001:10::', 28) ||
     ipv6InCidr(value, '2001:20::', 28) ||
