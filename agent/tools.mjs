@@ -73,8 +73,8 @@ async function readUrl(input) {
 }
 
 function calculator(expression) {
-  if (typeof expression !== 'string' || !expression.trim() || expression.length > 200 || !/^[0-9+\-*/%().\s^]+$/.test(expression)) throw new Error('Biểu thức không hợp lệ');
-  const tokens = expression.match(/\d+(?:\.\d+)?|[()+*/%^\-]/g) ?? [];
+  if (typeof expression !== 'string' || !expression.trim() || expression.length > 200 || !/^[0-9+\-*\/%().\s^]+$/.test(expression)) throw new Error('Biểu thức không hợp lệ');
+  const tokens = expression.match(/\d+(?:\.\d+)?|[()+*\/%^\-]/g)?.filter((token) => token !== " ") ?? [];
   if (tokens.join('') !== expression.replace(/\s+/g, '')) throw new Error('Biểu thức không hợp lệ');
   let position = 0;
   const peek = () => tokens[position];
