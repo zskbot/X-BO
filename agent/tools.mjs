@@ -43,6 +43,36 @@ async function webSearch(query) {
   return { output: results, summary: `${results.length} kết quả`, sources: results.map(({ title, url }) => ({ title, url })) };
 }
 
+function ipv6ToBigInt(address) {
+  let value = address.toLowerCase();
+  if (value.includes('.')) {
+    const splitAt = value.lastIndexOf(':');
+    const ipv4 = value.slice(splitAt + 1);
+    if (!net.isIPv4(ipv4)) return null;
+    const octets = ipv4.split('.').map(Number);
+    const high = ((octets[0] << 8) | octets[1]).toString(16);
+    const low = ((octets[2] << 8) | octets[3]).toString(16);
+    value = value.slice(0, splitAt) + ':' + high + ':' + low;
+  }
+  const halves = value.split('::');
+  if (halves.length > 2) return null;
+  const left = halves[0] ? halves[0].split(':') : [];
+  const right = halves.length === 2 && halves[1] ? halves[1].split(':') : [];
+  const missing = 8 - left.length - right.length;
+  if ((halves.length === 1 && missing !== 0) || (halves.length === 2 && missing < 1)) return null;
+  const groups = [...left, ...Array(missing).fill('0'), ...right];
+  if (groups.length !== 8 || groups.some((group) => !/^[0-9a-f]{1,4}$/.test(group))) return null;
+  return groups.reduce((result, group) => (result << 16n) | BigInt('0x' + group), 0n);
+}
+
+function ipv6InCidr(address, network, prefix) {
+  const value = ipv6ToBigInt(address);
+  const base = ipv6ToBigInt(network);
+  if (value === null || base === null) return true;
+  const shift = BigInt(128 - prefix);
+  return (value >> shift) === (base >> shift);
+}
+
 function isPrivate(ip) {
   if (net.isIPv4(ip)) {
     const octets = ip.split('.').map(Number);
@@ -64,11 +94,19 @@ function isPrivate(ip) {
   }
   if (!net.isIPv6(ip)) return true;
   const value = ip.toLowerCase();
-  // Only allow IPv6 global-unicast space (2000::/3). This rejects unspecified,
-  // loopback, link-local, unique-local, IPv4-mapped and most reserved ranges.
+  // Only allow IPv6 global-unicast space (2000::/3), and reject special-purpose
+  // ranges even when their textual representation uses expanded hextets.
   if (!/^[23]/.test(value)) return true;
-  return value.startsWith('2001:db8:') || value.startsWith('2001:2:') ||
-    value.startsWith('2002:') || value.startsWith('3fff:');
+  return ipv6InCidr(value, '2001:db8::', 32) ||
+    ipv6InCidr(value, '2001:2::', 48) ||
+    ipv6InCidr(value, '2001:10::', 28) ||
+    ipv6InCidr(value, '2001:20::', 28) ||
+    ipv6InCidr(value, '2002::', 16) ||
+    ipv6InCidr(value, '3fff::', 20);
+}
+
+export function isPublicAddress(ip) {
+  return !isPrivate(ip);
 }
 
 function normalizeHostnameBrackets(hostname) {

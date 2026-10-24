@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readUrl, tlsServername } from "../../agent/tools.mjs";
+import { isPublicAddress, readUrl, tlsServername } from "../../agent/tools.mjs";
 
 describe("URL reader SSRF protection", () => {
   it("rejects localhost and private-network URLs", async () => {
@@ -23,6 +23,22 @@ describe("URL reader SSRF protection", () => {
   it("rejects malformed URLs", async () => {
     await expect(readUrl("not-a-url")).rejects.toThrow();
     await expect(readUrl("")).rejects.toThrow();
+  });
+});
+
+describe("public IP address classification", () => {
+  it("rejects IPv6 special-purpose ranges in compressed and expanded forms", () => {
+    expect(isPublicAddress("2001:db8::1")).toBe(false);
+    expect(isPublicAddress("2001:0db8:0000:0000:0000:0000:0000:0001")).toBe(false);
+    expect(isPublicAddress("2001:10::1")).toBe(false);
+    expect(isPublicAddress("2001:20::1")).toBe(false);
+    expect(isPublicAddress("2002::1")).toBe(false);
+    expect(isPublicAddress("3fff::1")).toBe(false);
+  });
+
+  it("allows representative public IPv4 and IPv6 addresses", () => {
+    expect(isPublicAddress("8.8.8.8")).toBe(true);
+    expect(isPublicAddress("2606:4700:4700::1111")).toBe(true);
   });
 });
 
