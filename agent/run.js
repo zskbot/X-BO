@@ -1,6 +1,6 @@
 import { streamGemini } from './llm.js';
 import { systemPrompt } from './prompt.js';
-import { runTool, toolDeclarations, toolLabel } from './tools.js';
+import { runTool, toolDeclarations, toolLabel } from './tools.mjs';
 
 const MAX_STEPS = 5;
 
