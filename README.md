@@ -3,13 +3,7 @@
   <img src="assets/xbo3.png" width="180" alt="X-BO Bot">
 </p>
 
-<h1 align="center">X-BO<img width="480" height="480" alt="image" src="https://github.com/user-attachments/assets/2ed01241-a27c-43ad-8d26-5009ecdf5e4a" />
- «Bot»</h1>
-
-<p align="center">
-  <strong>One chat. More ways to get work done.</strong>
-</p>
-
+<h1 align="center">X-BO Bot</h1>
 
 <p align="center">
   <strong>One chat. More ways to get work done.</strong><br />
