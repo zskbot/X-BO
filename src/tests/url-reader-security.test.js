@@ -28,6 +28,8 @@ describe("URL reader SSRF protection", () => {
 
 describe("public IP address classification", () => {
   it("rejects IPv6 special-purpose ranges in compressed and expanded forms", () => {
+    expect(isPublicAddress("2001::1")).toBe(false);
+    expect(isPublicAddress("2001:1::1")).toBe(false);
     expect(isPublicAddress("2001:db8::1")).toBe(false);
     expect(isPublicAddress("2001:0db8:0000:0000:0000:0000:0000:0001")).toBe(false);
     expect(isPublicAddress("2001:10::1")).toBe(false);
