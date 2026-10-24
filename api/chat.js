@@ -1,4 +1,4 @@
-const { runAgent } = require('../agent/run');
+import { runAgent } from '../agent/run.js';
 
 const MAX_MESSAGES = 20;
 const MAX_CHARS = 4000;
@@ -96,5 +96,5 @@ async function handler(req, res) {
   res.end();
 }
 
-module.exports = handler;
-module.exports.toContents = toContents;
+export default handler;
+export { toContents };
