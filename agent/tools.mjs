@@ -114,3 +114,5 @@ function calculator(expression) {
   if (position !== tokens.length || !Number.isFinite(result)) throw new Error('Kết quả không hợp lệ');
   return { output: result, summary: `= ${result}` };
 }
+
+export { calculator };
