@@ -81,7 +81,7 @@ function requestPinned(url, address) {
         if (options?.all) callback(null, [{ address, family: net.isIPv6(address) ? 6 : 4 }]);
         else callback(null, address, net.isIPv6(address) ? 6 : 4);
       },
-      servername: net.isIP(url.hostname) ? undefined : url.hostname,
+      servername: net.isIP(url.hostname.replace(/^\\[|\\]$/g, '')) ? undefined : url.hostname,
     }, (response) => {
       const chunks = [];
       let size = 0;
