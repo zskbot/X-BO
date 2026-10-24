@@ -40,4 +40,4 @@ async function* streamGemini(contents, system, tools) {
   }
 }
 
-module.exports = { streamGemini };
+export { streamGemini };

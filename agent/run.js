@@ -1,6 +1,6 @@
-const { streamGemini } = require('./llm');
-const { systemPrompt } = require('./prompt');
-const { runTool, toolDeclarations, toolLabel } = require('./tools');
+import { streamGemini } from './llm.js';
+import { systemPrompt } from './prompt.js';
+import { runTool, toolDeclarations, toolLabel } from './tools.mjs';
 
 const MAX_STEPS = 5;
 
@@ -41,4 +41,4 @@ async function* runAgent(history, signal = { aborted: false }) {
   }
 }
 
-module.exports = { runAgent };
+export { runAgent };
