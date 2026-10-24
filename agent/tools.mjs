@@ -107,8 +107,8 @@ async function readUrl(input) {
     }
     if (response.statusCode < 200 || response.statusCode >= 300) throw new Error('Trang web trả lỗi');
     const html = response.body;
-    const title = /<title[^>]*>([\\s\\S]*?)<\\/title>/i.exec(html)?.[1]?.trim() ?? url.toString();
-    const text = html.replace(/<(script|style|noscript|svg)[\\s\\S]*?<\\/\\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\\s+/g, ' ').trim().slice(0, 8000);
+    const title = /<title[^>]*>([\s\S]*?)<\/title>/i.exec(html)?.[1]?.trim() ?? url.toString();
+    const text = html.replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim().slice(0, 8000);
     return { output: { title, text }, summary: `${text.length} ký tự`, sources: [{ title, url: url.toString() }] };
   }
   throw new Error('Không thể đọc URL');
