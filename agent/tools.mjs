@@ -92,7 +92,7 @@ async function readUrl(input) {
   try { url = new URL(input); } catch { throw new Error('URL không hợp lệ'); }
   for (let hop = 0; hop <= 3; hop += 1) {
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('URL không hợp lệ');
-    if (url.port && !['80', '443'].includes(url.port)) throw new Error('Cổng không được phép');
+    if (url.port && url.port !== (url.protocol === 'https:' ? '443' : '80')) throw new Error('Cổng không được phép');
     const addresses = net.isIP(url.hostname)
       ? [{ address: url.hostname }]
       : await dns.lookup(url.hostname, { all: true, verbatim: true });
