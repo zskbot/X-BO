@@ -157,4 +157,4 @@ function calculator(expression) {
   return { output: result, summary: `= ${result}` };
 }
 
-export { calculator };
+export { calculator, readUrl };
