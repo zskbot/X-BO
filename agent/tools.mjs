@@ -72,7 +72,7 @@ function isPrivate(ip) {
 }
 
 export function tlsServername(hostname) {
-  const normalized = hostname.replaceAll('[', '').replaceAll(']', '');
+  const normalized = hostname.replace(/^\[|\]$/g, '');
   return net.isIP(normalized) ? undefined : hostname;
 }
 
