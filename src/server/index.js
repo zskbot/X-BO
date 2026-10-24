@@ -23,6 +23,10 @@ app.use(express.json({ limit: "128kb" }));
 const chatRateLimit = createRateLimitMiddleware({ windowMs: 60_000, max: 30 });
 app.use("/v1/chat", chatRateLimit, chatRoutes);
 
+app.get("/livez", (req, res) => res.status(200).json({ status: "ok", uptimeSeconds: Math.floor(process.uptime()), requestId: req.requestId }));
+
+app.get("/readyz", (req, res) => res.status(200).json({ status: "ready", requestId: req.requestId }));
+
 app.get("/health",(req,res)=>{
   res.json(health());
 });
