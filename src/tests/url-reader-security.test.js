@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readUrl } from "../../agent/tools.mjs";
+import { readUrl, tlsServername } from "../../agent/tools.mjs";
 
 describe("URL reader SSRF protection", () => {
   it("rejects localhost and private-network URLs", async () => {
@@ -23,5 +23,17 @@ describe("URL reader SSRF protection", () => {
   it("rejects malformed URLs", async () => {
     await expect(readUrl("not-a-url")).rejects.toThrow();
     await expect(readUrl("")).rejects.toThrow();
+  });
+});
+
+describe("TLS server name selection", () => {
+  it("omits SNI for IPv4 and bracketed or unbracketed IPv6 literals", () => {
+    expect(tlsServername("127.0.0.1")).toBeUndefined();
+    expect(tlsServername("::1")).toBeUndefined();
+    expect(tlsServername("[2001:4860:4860::8888]")).toBeUndefined();
+  });
+
+  it("preserves DNS hostnames for TLS SNI", () => {
+    expect(tlsServername("example.com")).toBe("example.com");
   });
 });
