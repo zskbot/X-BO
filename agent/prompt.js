@@ -15,4 +15,4 @@ function systemPrompt() {
   ].join('\n');
 }
 
-module.exports = { systemPrompt };
+export { systemPrompt };
