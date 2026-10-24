@@ -45,11 +45,30 @@ async function webSearch(query) {
 
 function isPrivate(ip) {
   if (net.isIPv4(ip)) {
-    const [a, b] = ip.split('.').map(Number);
-    return a === 0 || a === 10 || a === 127 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127);
+    const octets = ip.split('.').map(Number);
+    const [a, b, c] = octets;
+    if (octets.length !== 4 || octets.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) return true;
+    // Reject private, loopback, link-local, shared, documentation, benchmarking,
+    // multicast, reserved, and other non-globally-routable IPv4 ranges.
+    return a === 0 || a === 10 || a === 127 || a >= 224 ||
+      (a === 100 && b >= 64 && b <= 127) ||
+      (a === 169 && b === 254) ||
+      (a === 172 && b >= 16 && b <= 31) ||
+      (a === 192 && b === 168) ||
+      (a === 192 && b === 0 && c === 0) ||
+      (a === 192 && b === 0 && c === 2) ||
+      (a === 192 && b === 88 && c === 99) ||
+      (a === 198 && (b === 18 || b === 19)) ||
+      (a === 198 && b === 51 && c === 100) ||
+      (a === 203 && b === 0 && c === 113);
   }
+  if (!net.isIPv6(ip)) return true;
   const value = ip.toLowerCase();
-  return value === '::' || value === '::1' || value.startsWith('fc') || value.startsWith('fd') || value.startsWith('fe80') || value.startsWith('::ffff:');
+  // Only allow IPv6 global-unicast space (2000::/3). This rejects unspecified,
+  // loopback, link-local, unique-local, IPv4-mapped and most reserved ranges.
+  if (!/^[23]/.test(value)) return true;
+  return value.startsWith('2001:db8:') || value.startsWith('2001:2:') ||
+    value.startsWith('2002:') || value.startsWith('3fff:');
 }
 
 function requestPinned(url, address) {
@@ -62,14 +81,15 @@ function requestPinned(url, address) {
         if (options?.all) callback(null, [{ address, family: net.isIPv6(address) ? 6 : 4 }]);
         else callback(null, address, net.isIPv6(address) ? 6 : 4);
       },
-      servername: url.hostname,
+      servername: net.isIP(url.hostname.replace(/^\\[|\\]$/g, '')) ? undefined : url.hostname,
     }, (response) => {
       const chunks = [];
       let size = 0;
       response.on('data', (chunk) => {
         size += chunk.length;
         if (size > 500000) {
-          request.destroy(new Error('Phản hồi vượt quá giới hạn'));
+          response.destroy(new Error('Phản hồi vượt quá giới hạn'));
+          request.destroy();
           return;
         }
         chunks.push(chunk);
@@ -93,11 +113,11 @@ async function readUrl(input) {
   for (let hop = 0; hop <= 3; hop += 1) {
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('URL không hợp lệ');
     if (url.port && url.port !== (url.protocol === 'https:' ? '443' : '80')) throw new Error('Cổng không được phép');
-    const addresses = net.isIP(url.hostname)
-      ? [{ address: url.hostname }]
-      : await dns.lookup(url.hostname, { all: true, verbatim: true });
-    if (!addresses.length || addresses.some(({ address }) => isPrivate(address))) throw new Error('Địa chỉ nội bộ bị chặn');
-    // Pin the validated address into the socket lookup callback to prevent DNS rebinding.
+    const hostname = url.hostname.replace(/^\[|\]$/g, '');
+    const addresses = net.isIP(hostname)
+      ? [{ address: hostname }]
+      : await dns.lookup(hostname, { all: true, verbatim: true });
+    if (!addresses.length || addresses.some(({ address }) => isPrivate(address))) throw new Error('Địa chỉ không công khai bị chặn');
     const response = await requestPinned(url, addresses[0].address);
     const location = response.headers.location;
     if (response.statusCode >= 300 && response.statusCode < 400 && location) {
