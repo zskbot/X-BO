@@ -10,7 +10,7 @@ export function parsePlanTasks(content) {
 
   for (const line of lines) {
     const heading = line.replace(/^#{1,4}\s*/, '').replace(/[*_]/g, '').trim();
-    if (/^(t[aá]c v[uụ]c|tasks?|implementation steps|c[aá]c b[uư][ớo]c|steps?)\b/i.test(heading)) {
+    if (/^(t[aá]c v[uụ]|tasks?|implementation steps|c[aá]c b[uư][ớo]c|steps?)\b/i.test(heading)) {
       inTaskSection = true;
       continue;
     }
