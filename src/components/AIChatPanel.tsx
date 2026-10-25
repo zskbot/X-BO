@@ -150,15 +150,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         {isWelcome ? (
           <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-4 py-8 sm:px-8 sm:py-12">
-            <section className="xbo-hero relative mb-7 overflow-hidden rounded-2xl border p-5 sm:p-7"><div className="xbo-hero-glow" /><div className="relative z-10"><div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/[0.07] px-3 py-1.5 text-[11px] text-cyan-100"><span className="xbo-mini-logo">X</span> x-bo by <span className="text-sky-300">OCODE.js</span></div><div className="xbo-hero-robot" aria-hidden="true"><span /><span /></div><div className="mb-3 flex items-center gap-2 text-xs font-medium text-indigo-300">
-              <Sparkles size={15} /> YOUR AI BUILDING WORKSPACE
-            </div>
-            <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.04em] text-white sm:text-5xl">
-              Biến ý tưởng thành <span className="bg-gradient-to-r from-indigo-300 to-sky-300 bg-clip-text text-transparent">ứng dụng thực tế.</span>
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-neutral-400 sm:text-base">
-              Mô tả sản phẩm bạn muốn xây dựng. x-bo giúp bạn bắt đầu từ yêu cầu, làm rõ cấu trúc và tiếp tục hoàn thiện cùng hệ sinh thái OCODE.js.
-            </p></div></section>
+
 
             <div className="xbo-composer mt-8 border p-3 shadow-[0_18px_70px_rgba(31,41,90,0.12)] sm:p-4">
               <label htmlFor="xbo-prompt" className="sr-only">Mô tả ứng dụng muốn xây dựng</label>
