@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Menu, Archive, Share2, Github, ChevronDown, Columns, BookOpen,
+  Menu, Archive, Share2, Github, ChevronDown,
   ListTodo, FileText, MessageCircle, FileSpreadsheet
 } from 'lucide-react';
 import { UserProfile, PushNotification } from '../types/shell';
@@ -18,8 +18,6 @@ interface HeaderProps {
   isSyncing: boolean;
   onManualSync: () => void;
   cleanHomeMode?: boolean;
-  activeNavTab: 'chat' | 'diff' | 'logs' | 'rfc';
-  onChangeNavTab: (tab: 'chat' | 'diff' | 'logs' | 'rfc') => void;
   onToggleCleanHomeMode: () => void;
 }
 
@@ -35,18 +33,9 @@ export const Header: React.FC<HeaderProps> = ({
   isSyncing,
   onManualSync,
   cleanHomeMode = true,
-  activeNavTab,
-  onChangeNavTab,
   onToggleCleanHomeMode
 }) => {
   const unreadCount = notifications.filter(n => !n.read).length;
-  const navItems = [
-    { id: 'chat' as const, label: 'Chat' },
-    { id: 'diff' as const, label: 'Diff' },
-    { id: 'logs' as const, label: 'Nhật ký' },
-    { id: 'rfc' as const, label: 'RFC Specs' }
-  ];
-
   return (
     <div className="sticky top-0 z-30 select-none border-b border-zinc-800/80 bg-[#09090b]/95 font-sans backdrop-blur-xl">
       <header className="flex min-h-[60px] items-center justify-between gap-3 px-3 py-2 sm:px-6">
@@ -107,30 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
 
-      <div className="flex items-center justify-between gap-3 border-t border-zinc-800/60 px-3 py-2 sm:px-6">
-        <nav aria-label="Điều hướng workspace" className="flex min-w-0 items-center gap-1 overflow-x-auto">
-          {navItems.map(item => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => onChangeNavTab(item.id)}
-              aria-current={activeNavTab === item.id ? 'page' : undefined}
-              className={`min-h-9 shrink-0 rounded-lg px-3 text-xs font-medium transition-colors ${activeNavTab === item.id ? 'bg-zinc-100 text-zinc-950' : 'text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100'}`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
-        <button
-          type="button"
-          onClick={onToggleCleanHomeMode}
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-colors ${cleanHomeMode ? 'border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100' : 'border-zinc-600 bg-zinc-800 text-zinc-100'}`}
-          title={cleanHomeMode ? 'Mở Bảng Phân Tích Song Song' : 'Đóng Bảng Phân Tích'}
-          aria-label={cleanHomeMode ? 'Mở bảng phân tích' : 'Đóng bảng phân tích'}
-        >
-          <Columns className="h-4 w-4" />
-        </button>
-      </div>
+
     </div>
   );
 };
