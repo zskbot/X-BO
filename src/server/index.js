@@ -9,6 +9,7 @@ import { health } from "../health/index.js";
 import chatRoutes from "../routes/chat.js";
 import { createSocket } from "../ws/server.js";
 import { corsOptionsFromEnv, createRateLimitMiddleware, requestIdMiddleware } from "./middleware/security.js";
+import { openApiSpec } from "./openapi.js";
 
 const app=express();
 
@@ -22,6 +23,8 @@ app.use(morgan("dev"));
 app.use(express.json({ limit: "128kb" }));
 const chatRateLimit = createRateLimitMiddleware({ windowMs: 60_000, max: 30 });
 app.use("/v1/chat", chatRateLimit, chatRoutes);
+
+app.get("/openapi.json", (req, res) => res.status(200).json(openApiSpec));
 
 app.get("/livez", (req, res) => res.status(200).json({ status: "ok", uptimeSeconds: Math.floor(process.uptime()), requestId: req.requestId }));
 
