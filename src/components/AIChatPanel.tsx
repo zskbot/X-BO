@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { requestChat } from '../lib/xbo-chat-client.js';
 import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
 
 const MODEL_OPTIONS = [
@@ -67,28 +68,16 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     setStatus(null);
 
     try {
-      const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
-      const response = await fetch(`${apiBase}/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: trimmed, model: selectedModel })
+      const content = await requestChat({
+        message: trimmed,
+        model: selectedModel,
+        apiBase: import.meta.env.VITE_API_BASE_URL || ''
       });
-
-      if (!response.ok) {
-        const detail = (await response.text()).trim().slice(0, 500);
-        throw new Error(detail || `API trả về HTTP ${response.status}. Kiểm tra backend và provider.`);
-      }
-
-      const data = await response.json();
-      const content = data.response || data.result || 'API đã phản hồi nhưng không có nội dung.';
       setMessages(prev => [...prev, { role: 'assistant', content }]);
       setStatus({ type: 'info', text: 'Đã nhận phản hồi từ agent.' });
     } catch (err) {
+      setInput(trimmed);
       setStatus({ type: 'error', text: err instanceof Error ? err.message : 'Lỗi khi gọi agent.' });
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: 'Không thể nhận phản hồi từ agent. Kiểm tra API server, endpoint và cấu hình provider.'
-      }]);
     } finally {
       setIsSending(false);
     }
@@ -203,7 +192,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
             </div>
           </main>
         ) : (
-          <section className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-6 sm:px-8">
+          <section aria-live="polite" aria-relevant="additions text" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-6 sm:px-8">
             <div className="mb-1 flex items-center gap-2 text-xs text-neutral-500"><Sparkles size={14} className="text-indigo-300" /> x-bo conversation</div>
             {messages.filter(message => message.role !== 'system').map((message, index) => (
               <article key={`${message.role}-${index}`} className={`max-w-[92%] border p-4 sm:max-w-[85%] ${message.role === 'user' ? 'ml-auto border-indigo-400/20 bg-indigo-400/[0.08]' : 'border-white/10 bg-white/[0.025]'}`}>
@@ -220,7 +209,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
 
       {!isWelcome && (
         <div className="border-t border-white/10 bg-[#090b13] px-4 py-4 sm:px-8">
-          {status && <div role="status" className={`mx-auto mb-3 max-w-4xl border px-3 py-2 text-xs ${status.type === 'error' ? 'border-rose-500/30 bg-rose-950/30 text-rose-200' : 'border-white/10 bg-white/[0.03] text-neutral-400'}`}>{status.text}</div>}
+          {status && <div role={status.type === 'error' ? 'alert' : 'status'} className={`mx-auto mb-3 max-w-4xl border px-3 py-2 text-xs ${status.type === 'error' ? 'border-rose-500/30 bg-rose-950/30 text-rose-200' : 'border-white/10 bg-white/[0.03] text-neutral-400'}`}>{status.text}</div>}
           <div className="mx-auto flex max-w-4xl items-end gap-2 border border-white/10 bg-[#0c0f18] p-2 focus-within:border-indigo-400/40">
             <textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
               placeholder="Tiếp tục yêu cầu hoặc tinh chỉnh ứng dụng..." aria-label="Tin nhắn cho x-bo"
