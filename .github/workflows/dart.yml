@@ -8,8 +8,18 @@ name: Dart
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'analysis_options.yaml'
+      - '**/*.dart'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'analysis_options.yaml'
+      - '**/*.dart'
 
 jobs:
   build:

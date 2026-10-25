@@ -24,6 +24,10 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      JSCRAMBLER_APPLICATION_ID: ${{ secrets.JSCRAMBLER_APPLICATION_ID }}
+      JSCRAMBLER_SECRET_KEY: ${{ secrets.JSCRAMBLER_SECRET_KEY }}
+      JSCRAMBLER_ACCESS_KEY: ${{ secrets.JSCRAMBLER_ACCESS_KEY }}
     permissions:
       contents: read
     steps:
@@ -35,6 +39,7 @@ jobs:
       - run: npm run build
       - name: Jscrambler Code Integrity
         id: jscrambler
+        if: ${{ hashFiles('jscrambler.json') != '' && env.JSCRAMBLER_APPLICATION_ID != '' && env.JSCRAMBLER_SECRET_KEY != '' && env.JSCRAMBLER_ACCESS_KEY != '' }}
         # the complete list of inputs can be found here: https://github.com/marketplace/actions/jscrambler#inputs
         uses: jscrambler/code-integrity-actions/protect@ab65962a2ecffcc362b75a997e24a181d0bde5fb
         with:
@@ -45,3 +50,7 @@ jobs:
           files-src: |                                              # List of Files to be protected
             dist/**/*
           files-dest: .
+
+      - name: Explain skipped Jscrambler protection
+        if: ${{ hashFiles('jscrambler.json') == '' || env.JSCRAMBLER_APPLICATION_ID == '' || env.JSCRAMBLER_SECRET_KEY == '' || env.JSCRAMBLER_ACCESS_KEY == '' }}
+        run: echo "Jscrambler protection skipped: jscrambler.json and all three Jscrambler repository secrets are required."

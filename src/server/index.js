@@ -9,6 +9,8 @@ import { health } from "../health/index.js";
 import chatRoutes from "../routes/chat.js";
 import { createSocket } from "../ws/server.js";
 import { corsOptionsFromEnv, createRateLimitMiddleware, requestIdMiddleware } from "./middleware/security.js";
+import { openApiSpec } from "./openapi.js";
+import { validateLegacyChatRequest } from "./chat-validation.js";
 
 const app=express();
 
@@ -23,6 +25,8 @@ app.use(express.json({ limit: "128kb" }));
 const chatRateLimit = createRateLimitMiddleware({ windowMs: 60_000, max: 30 });
 app.use("/v1/chat", chatRateLimit, chatRoutes);
 
+app.get("/openapi.json", (req, res) => res.status(200).json(openApiSpec));
+
 app.get("/livez", (req, res) => res.status(200).json({ status: "ok", uptimeSeconds: Math.floor(process.uptime()), requestId: req.requestId }));
 
 app.get("/readyz", (req, res) => res.status(200).json({ status: "ready", requestId: req.requestId }));
@@ -31,9 +35,21 @@ app.get("/health",(req,res)=>{
   res.json(health());
 });
 
-app.post("/chat", chatRateLimit, async(req,res)=>{
-  const result=await router(req.body.message);
-  res.json({result});
+app.post("/chat", chatRateLimit, async (req, res, next) => {
+  const validated = validateLegacyChatRequest(req.body);
+  if (validated.error) {
+    return res.status(validated.error.status).json({
+      error: { code: validated.error.code, message: validated.error.message },
+      requestId: req.requestId,
+    });
+  }
+
+  try {
+    const result = await router(validated.message, validated.model);
+    return res.json({ result });
+  } catch (error) {
+    return next(error);
+  }
 });
 
 app.use((err, req, res, next) => {

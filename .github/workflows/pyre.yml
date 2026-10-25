@@ -19,8 +19,20 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
+    paths:
+      - 'requirements.txt'
+      - 'requirements-dev.txt'
+      - '.pyre_configuration'
+      - '.pyre_configuration.local'
+      - '**/*.py'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'requirements.txt'
+      - 'requirements-dev.txt'
+      - '.pyre_configuration'
+      - '.pyre_configuration.local'
+      - '**/*.py'
 
 permissions:
     contents: read
