@@ -253,7 +253,8 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
         </div>
       )}
 
-      <nav className="xbo-bottom-nav mx-auto grid w-full max-w-4xl grid-cols-5 sm:hidden" aria-label="Điều hướng nhanh"><span className="selected"><MessageSquare size={17}/><small>Chat</small></span><span><LayoutDashboard size={17}/><small>Templates</small></span><span><Code2 size={17}/><small>Workspace</small></span><span><Sparkles size={17}/><small>Deploy</small></span><a href="https://github.com/zskbot/X-BO" target="_blank" rel="noreferrer"><Github size={17}/><small>GitHub</small></a></nav>\n      {isWelcome && status && (
+      <nav className="xbo-bottom-nav mx-auto grid w-full max-w-4xl grid-cols-5 sm:hidden" aria-label="Điều hướng nhanh"><span className="selected"><MessageSquare size={17}/><small>Chat</small></span><span><LayoutDashboard size={17}/><small>Templates</small></span><span><Code2 size={17}/><small>Workspace</small></span><span><Sparkles size={17}/><small>Deploy</small></span><a href="https://github.com/zskbot/X-BO" target="_blank" rel="noreferrer"><Github size={17}/><small>GitHub</small></a></nav>
+      {isWelcome && status && (
         <div role="status" className={`border-t px-4 py-2 text-center text-[11px] ${status.type === 'error' ? 'border-rose-500/20 bg-rose-950/20 text-rose-200' : 'border-white/[0.06] bg-[#090b13] text-neutral-600'}`}>
           {status.text}
         </div>
