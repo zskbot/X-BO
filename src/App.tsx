@@ -307,20 +307,7 @@ export default function App() {
                 <AIChatPanel selectedModel={selectedModel} onSelectModel={setSelectedModel} />
               </div>
               <div className="lg:hidden flex-1 flex flex-col h-full overflow-hidden">
-                <TerminalOutput
-                  history={history}
-                  outputEndRef={outputEndRef}
-                  aiConfidence={metrics.aiConfidence}
-                  activeNavTab={activeNavTab}
-                />
-                <TerminalInput
-                  onExecute={handleExecuteCommand}
-                  onClear={handleClearTerminal}
-                  onToggleGraph={() => handleExecuteCommand('watson run-analysis --db cloudant_prod')}
-                  onToggleLogs={() => handleExecuteCommand('cat cloudant_v3_log.json')}
-                  historyCommands={history.map(h => h.command)}
-                  aiConfidence={metrics.aiConfidence}
-                />
+                <AIChatPanel selectedModel={selectedModel} onSelectModel={setSelectedModel} />
               </div>
             </div>
 
