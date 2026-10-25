@@ -11,8 +11,22 @@ name: R
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'DESCRIPTION'
+      - 'NAMESPACE'
+      - 'R/**'
+      - 'tests/**'
+      - 'man/**'
+      - '*.Rproj'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'DESCRIPTION'
+      - 'NAMESPACE'
+      - 'R/**'
+      - 'tests/**'
+      - 'man/**'
+      - '*.Rproj'
 
 permissions:
   contents: read
