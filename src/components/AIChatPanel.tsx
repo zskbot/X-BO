@@ -123,12 +123,6 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
 
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[#070910] text-white">
-      <div className="flex flex-wrap items-center gap-2 border-b border-white/[0.07] bg-[#080a11] px-4 py-2 sm:px-6">
-        <span className="mr-1 text-[10px] uppercase tracking-wider text-neutral-600">Workspace</span>
-        <button type="button" onClick={() => setWorkspaceMode('chat')} aria-pressed={workspaceMode === 'chat'} className={`border px-3 py-1.5 text-xs ${workspaceMode === 'chat' ? 'border-indigo-400/40 bg-indigo-400/10 text-indigo-200' : 'border-white/10 text-neutral-400'}`}>Chat</button>
-        <button type="button" onClick={() => setWorkspaceMode('plan')} aria-pressed={workspaceMode === 'plan'} className={`border px-3 py-1.5 text-xs ${workspaceMode === 'plan' ? 'border-indigo-400/40 bg-indigo-400/10 text-indigo-200' : 'border-white/10 text-neutral-400'}`}>Lập kế hoạch</button>
-        <span className="ml-auto text-[10px] text-neutral-600">{workspaceMode === 'plan' ? 'Đề xuất · không tự sửa file' : 'Trao đổi với AI provider'}</span>
-      </div>
       {workspaceMode === 'plan' && input.trim() && (
         <section aria-label="Kế hoạch xây dựng sơ bộ" className="mx-4 mt-3 border border-indigo-400/20 bg-indigo-400/[0.035] p-4 sm:mx-6 sm:p-5">
           <div className="flex items-start justify-between gap-3">
