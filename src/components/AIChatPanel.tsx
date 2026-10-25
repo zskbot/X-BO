@@ -161,7 +161,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-neutral-400 sm:text-base">
               Mô tả sản phẩm bạn muốn xây dựng. x-bo giúp bạn bắt đầu từ yêu cầu, làm rõ cấu trúc và tiếp tục hoàn thiện cùng hệ sinh thái OCODE.js.
-            </p>
+            </p></div></section>
 
             <div className="xbo-composer mt-8 border p-3 shadow-[0_18px_70px_rgba(31,41,90,0.12)] sm:p-4">
               <label htmlFor="xbo-prompt" className="sr-only">Mô tả ứng dụng muốn xây dựng</label>
