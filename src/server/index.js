@@ -10,6 +10,7 @@ import chatRoutes from "../routes/chat.js";
 import { createSocket } from "../ws/server.js";
 import { corsOptionsFromEnv, createRateLimitMiddleware, requestIdMiddleware } from "./middleware/security.js";
 import { openApiSpec } from "./openapi.js";
+import { validateLegacyChatRequest } from "./chat-validation.js";
 
 const app=express();
 
@@ -34,9 +35,21 @@ app.get("/health",(req,res)=>{
   res.json(health());
 });
 
-app.post("/chat", chatRateLimit, async(req,res)=>{
-  const result=await router(req.body.message);
-  res.json({result});
+app.post("/chat", chatRateLimit, async (req, res, next) => {
+  const validated = validateLegacyChatRequest(req.body);
+  if (validated.error) {
+    return res.status(validated.error.status).json({
+      error: { code: validated.error.code, message: validated.error.message },
+      requestId: req.requestId,
+    });
+  }
+
+  try {
+    const result = await router(validated.message, validated.model);
+    return res.json({ result });
+  } catch (error) {
+    return next(error);
+  }
 });
 
 app.use((err, req, res, next) => {
