@@ -171,3 +171,47 @@ header + div button[class*="bg-cyan-400"] {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+
+/* Mobile-first navigation: replace the bottom bar with the existing hamburger drawer */
+@media (max-width: 640px) {
+  .xbo-bottom-nav {
+    display: none !important;
+  }
+
+  header {
+    min-height: 56px;
+    padding-top: max(8px, env(safe-area-inset-top));
+  }
+
+  header button[title*="Menu"],
+  header button[aria-label*="Menu"],
+  header button[title*="menu"] {
+    min-width: 48px;
+    min-height: 48px;
+    justify-content: center;
+    border: 1px solid var(--xbo-border) !important;
+    border-radius: 12px !important;
+    background: var(--xbo-panel) !important;
+  }
+
+  header button[title*="Menu"] span,
+  header button[aria-label*="Menu"] span,
+  header button[title*="menu"] span {
+    display: none;
+  }
+
+  /* Give the drawer a full-height, easy-to-dismiss mobile surface. */
+  #root [role="dialog"],
+  #root aside {
+    max-width: min(88vw, 360px);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Safari/iOS support for frosted surfaces. */
+header,
+.xbo-bottom-nav {
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
