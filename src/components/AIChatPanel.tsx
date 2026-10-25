@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { requestChat } from '../lib/xbo-chat-client.js';
 import { PlanChecklist } from './PlanChecklist.tsx';
 import { CodeProposalView } from './CodeProposalView.tsx';
-import { ArrowUp, Bot, Check, ChevronDown, Code2, Copy, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
+import { ArrowUp, Bot, Check, CheckCircle2, ChevronDown, Code2, Copy, Github, LayoutDashboard, ListChecks, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
+import { createBuildPlan } from '../utils/buildPlanner.js';
 
 const MODEL_OPTIONS = [
   { value: 'zsk', label: 'ZsK Free Agent' },
@@ -62,6 +63,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
   const [showProviderMenu, setShowProviderMenu] = useState(false);
   const [copiedMessage, setCopiedMessage] = useState<number | null>(null);
   const isWelcome = messages.length <= 1;
+  const localBuildPlan = createBuildPlan(input);
 
   const handleSend = async () => {
     const trimmed = input.trim();
@@ -160,6 +162,30 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
         <button type="button" onClick={() => setWorkspaceMode('plan')} aria-pressed={workspaceMode === 'plan'} className={`border px-3 py-1.5 text-xs ${workspaceMode === 'plan' ? 'border-indigo-400/40 bg-indigo-400/10 text-indigo-200' : 'border-white/10 text-neutral-400'}`}>Lập kế hoạch</button>
         <span className="ml-auto text-[10px] text-neutral-600">{workspaceMode === 'plan' ? 'Đề xuất · không tự sửa file' : 'Trao đổi với AI provider'}</span>
       </div>
+      {workspaceMode === 'plan' && input.trim() && (
+        <section aria-label="Kế hoạch xây dựng sơ bộ" className="mx-4 mt-3 border border-indigo-400/20 bg-indigo-400/[0.035] p-4 sm:mx-6 sm:p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2 text-sm font-semibold text-neutral-100"><ListChecks size={16} className="text-indigo-300" /> Kế hoạch đề xuất</div>
+              <p className="mt-1 text-xs leading-5 text-neutral-500">Tạo tại trình duyệt từ prompt hiện tại. Chỉ là kế hoạch sơ bộ, chưa tạo hoặc sửa mã nguồn.</p>
+            </div>
+            <span className="shrink-0 border border-white/10 px-2 py-1 text-[10px] text-neutral-400">{localBuildPlan.length} bước</span>
+          </div>
+          <ol className="mt-4 space-y-3">
+            {localBuildPlan.map((task, index) => (
+              <li key={task.id} className="flex gap-3">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-indigo-400/25 text-[10px] text-indigo-200">{String(index + 1).padStart(2, '0')}</span>
+                <div>
+                  <div className="text-xs font-medium text-neutral-200">{task.title}</div>
+                  <p className="mt-1 text-xs leading-5 text-neutral-500">{task.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-4 flex items-center gap-2 border-t border-white/[0.07] pt-3 text-[11px] text-neutral-500"><CheckCircle2 size={13} className="text-indigo-300" /> Xem lại prompt rồi gửi cho agent khi sẵn sàng.</div>
+        </section>
+      )}
+
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         {isWelcome ? (
           <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-4 py-8 sm:px-8 sm:py-12">
