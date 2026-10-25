@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Check, Copy, FileCode2 } from 'lucide-react';
+import { Check, Copy, Code2 } from 'lucide-react';
 import { parseCodeProposals } from '../lib/xbo-code-proposal.js';
 
 interface CodeProposalViewProps {
@@ -35,7 +35,7 @@ export const CodeProposalView: React.FC<CodeProposalViewProps> = ({ content }) =
         <section key={`code-${index}`} aria-label="Code proposal preview" className="overflow-hidden border border-indigo-400/20 bg-[#06080e]">
           <header className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 bg-white/[0.025] px-3 py-2">
             <div className="flex min-w-0 items-center gap-2 text-xs text-neutral-300">
-              <FileCode2 size={14} className="shrink-0 text-indigo-300" />
+              <Code2 size={14} className="shrink-0 text-indigo-300" />
               <span className="truncate">{segment.filename || 'Code proposal'}</span>
               <span className="border border-white/10 px-1.5 py-0.5 text-[10px] uppercase text-neutral-500">{segment.language}</span>
             </div>
