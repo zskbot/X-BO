@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { CheckCircle2, Circle, ListChecks } from 'lucide-react';
 import { parsePlanTasks } from '../lib/xbo-plan-parser.js';
+import { CodeProposalView } from './CodeProposalView.tsx';
 
 interface PlanChecklistProps {
   content: string;
@@ -10,12 +11,12 @@ export const PlanChecklist: React.FC<PlanChecklistProps> = ({ content }) => {
   const tasks = useMemo(() => parsePlanTasks(content), [content]);
   const [checkedTasks, setCheckedTasks] = useState<Record<string, boolean>>({});
   if (!tasks.length) {
-    return <div className="whitespace-pre-wrap break-words text-sm leading-6 text-neutral-200">{content}</div>;
+    return <CodeProposalView content={content} />;
   }
   const completed = tasks.filter(task => checkedTasks[task]).length;
   return (
     <div className="space-y-4">
-      <div className="whitespace-pre-wrap break-words text-sm leading-6 text-neutral-200">{content}</div>
+      <CodeProposalView content={content} />
       <section aria-label="Checklist kế hoạch" className="border border-indigo-400/20 bg-indigo-400/[0.04] p-3">
         <div className="mb-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs font-semibold text-indigo-200"><ListChecks size={15} /> Checklist kế hoạch</div>
