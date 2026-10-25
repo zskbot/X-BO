@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { requestChat } from '../lib/xbo-chat-client.js';
 import { PlanChecklist } from './PlanChecklist.tsx';
 import { CodeProposalView } from './CodeProposalView.tsx';
-import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
+import { ArrowUp, Bot, Check, ChevronDown, Code2, Copy, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
 
 const MODEL_OPTIONS = [
   { value: 'zsk', label: 'ZsK Free Agent' },
@@ -59,7 +59,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     text: 'Kết quả phụ thuộc API server và provider credentials đã cấu hình.'
   });
   const [isSending, setIsSending] = useState(false);
-  const [showProviderMenu, setShowProviderMenu] = useState(false);
+  const [showProviderMenu, setShowProviderMenu] = useState(false);\n  const [copiedMessage, setCopiedMessage] = useState<number | null>(null);
   const isWelcome = messages.length <= 1;
 
   const handleSend = async () => {
@@ -97,7 +97,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleCopyMessage = async (content: string, index: number) => {\n    try {\n      await navigator.clipboard.writeText(content);\n      setCopiedMessage(index);\n      setStatus({ type: 'info', text: 'Đã sao chép nội dung phản hồi.' });\n    } catch {\n      setStatus({ type: 'error', text: 'Không thể truy cập clipboard. Hãy chọn và sao chép nội dung thủ công.' });\n    }\n  };\n\n  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       void handleSend();
@@ -215,8 +215,9 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
             <div className="mb-1 flex items-center gap-2 text-xs text-neutral-500"><Sparkles size={14} className="text-indigo-300" /> x-bo conversation</div>
             {messages.filter(message => message.role !== 'system').map((message, index) => (
               <article key={`${message.role}-${index}`} className={`max-w-[92%] border p-4 sm:max-w-[85%] ${message.role === 'user' ? 'ml-auto border-indigo-400/20 bg-indigo-400/[0.08]' : 'border-white/10 bg-white/[0.025]'}`}>
-                <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
-                  {message.role === 'user' ? 'You' : <><Bot size={13} className="text-indigo-300" /> x-bo agent</>}
+                <div className="mb-2 flex items-center justify-between gap-3 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                  <span className="flex items-center gap-2">{message.role === 'user' ? 'Bạn' : <><Bot size={13} className="text-indigo-300" /> x-bo agent</>}</span>
+                  {message.role === 'assistant' && <button type="button" onClick={() => void handleCopyMessage(message.content, index)} aria-label="Sao chép phản hồi" className="inline-flex items-center gap-1.5 rounded-md border border-white/10 px-2 py-1 text-[10px] normal-case tracking-normal text-neutral-400 transition hover:border-cyan-300/40 hover:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300"><Copy size={12} /> Sao chép</button>}
                 </div>
                 <div className="text-sm leading-6 text-neutral-200">{message.role === 'assistant' && message.workspaceMode === 'plan' ? <PlanChecklist content={message.content} /> : message.role === 'assistant' ? <CodeProposalView content={message.content} /> : <div className="whitespace-pre-wrap break-words">{message.content}</div>}</div>
               </article>
@@ -231,7 +232,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
           {status && <div role={status.type === 'error' ? 'alert' : 'status'} className={`mx-auto mb-3 max-w-4xl border px-3 py-2 text-xs ${status.type === 'error' ? 'border-rose-500/30 bg-rose-950/30 text-rose-200' : 'border-white/10 bg-white/[0.03] text-neutral-400'}`}>{status.text}</div>}
           <div className="mx-auto flex max-w-4xl items-end gap-2 border border-white/10 bg-[#0c0f18] p-2 focus-within:border-indigo-400/40">
             <textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-              placeholder="Tiếp tục yêu cầu hoặc tinh chỉnh ứng dụng..." aria-label="Tin nhắn cho x-bo"
+              placeholder="Tiếp tục yêu cầu hoặc tinh chỉnh ứng dụng..." aria-label="Tin nhắn cho x-bo" maxLength={8000}
               className="max-h-40 min-h-12 flex-1 resize-y bg-transparent px-2 py-2 text-sm text-white outline-none placeholder:text-neutral-600" />
             <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending} aria-label="Gửi yêu cầu"
               className="flex h-10 shrink-0 items-center gap-2 bg-indigo-400 px-3 text-xs font-semibold text-[#080a10] hover:bg-indigo-300 disabled:opacity-40">
