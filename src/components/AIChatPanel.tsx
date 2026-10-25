@@ -98,8 +98,15 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     }
   };
 
-  const handleCopyMessage = async (content: string, index: number) => {\n    try {\n      await navigator.clipboard.writeText(content);\n      setCopiedMessage(index);\n      setStatus({ type: 'info', text: 'Đã sao chép nội dung phản hồi.' });\n    } catch {\n      setStatus({ type: 'error', text: 'Không thể truy cập clipboard. Hãy chọn và sao chép nội dung thủ công.' });\n    }\n  };
-
+  const handleCopyMessage = async (content: string, index: number) => {
+    try {
+      await navigator.clipboard.writeText(content);
+      setCopiedMessage(index);
+      setStatus({ type: 'info', text: 'Đã sao chép nội dung phản hồi.' });
+    } catch {
+      setStatus({ type: 'error', text: 'Không thể truy cập clipboard. Hãy chọn và sao chép nội dung thủ công.' });
+    }
+  };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
