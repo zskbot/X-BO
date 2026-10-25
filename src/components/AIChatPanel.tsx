@@ -59,7 +59,8 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     text: 'Kết quả phụ thuộc API server và provider credentials đã cấu hình.'
   });
   const [isSending, setIsSending] = useState(false);
-  const [showProviderMenu, setShowProviderMenu] = useState(false);\n  const [copiedMessage, setCopiedMessage] = useState<number | null>(null);
+  const [showProviderMenu, setShowProviderMenu] = useState(false);
+  const [copiedMessage, setCopiedMessage] = useState<number | null>(null);
   const isWelcome = messages.length <= 1;
 
   const handleSend = async () => {
@@ -97,7 +98,9 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     }
   };
 
-  const handleCopyMessage = async (content: string, index: number) => {\n    try {\n      await navigator.clipboard.writeText(content);\n      setCopiedMessage(index);\n      setStatus({ type: 'info', text: 'Đã sao chép nội dung phản hồi.' });\n    } catch {\n      setStatus({ type: 'error', text: 'Không thể truy cập clipboard. Hãy chọn và sao chép nội dung thủ công.' });\n    }\n  };\n\n  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleCopyMessage = async (content: string, index: number) => {\n    try {\n      await navigator.clipboard.writeText(content);\n      setCopiedMessage(index);\n      setStatus({ type: 'info', text: 'Đã sao chép nội dung phản hồi.' });\n    } catch {\n      setStatus({ type: 'error', text: 'Không thể truy cập clipboard. Hãy chọn và sao chép nội dung thủ công.' });\n    }\n  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       void handleSend();
