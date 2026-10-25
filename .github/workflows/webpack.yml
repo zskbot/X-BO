@@ -3,8 +3,14 @@ name: NodeJS with Webpack
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'webpack.config.*'
+      - 'webpack/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'webpack.config.*'
+      - 'webpack/**'
 
 jobs:
   build:
