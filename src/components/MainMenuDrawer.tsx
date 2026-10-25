@@ -73,10 +73,10 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   isSyncing,
   onSetConfidence
 }) => {
-  if (!isOpen) return null;
-
   const [activeTab, setActiveTab] = useState<'utilities' | 'files' | 'sessions' | 'system'>('utilities');
+  const [activeUtilityTab, setActiveUtilityTab] = useState<'actions' | 'reports' | 'terminal'>('actions');
   const theme = getConfidenceTheme(metrics.aiConfidence);
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex select-none animate-in fade-in duration-200">
@@ -114,84 +114,31 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           </button>
         </div>
 
-        {/* Home Layout Mode Selector Banner */}
-        <div className="p-3 bg-neutral-950 border-b-2 border-neutral-800 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            {cleanHomeMode ? (
-              <Maximize2 className="w-4 h-4 text-cyan-400" />
-            ) : (
-              <Minimize2 className="w-4 h-4 text-cyan-400" />
-            )}
-            <div>
-              <div className="text-xs font-bold text-white">
-                {cleanHomeMode ? 'Bố Cục Home: Dọn Sạch (Clean)' : 'Bố Cục Home: Đa Bảng (Studio)'}
-              </div>
-              <div className="text-[10px] text-neutral-400">
-                {cleanHomeMode ? 'Chỉ hiện Terminal & Tiện ích chính' : 'Hiển thị đầy đủ thanh bên'}
-              </div>
-            </div>
+        <div className="xbo-infra-summary flex items-center justify-between gap-3 px-4 py-3">
+          <div className="min-w-0">
+            <div className="text-[11px] font-semibold text-zinc-100">Workspace</div>
+            <div className="mt-1 text-[10px] text-zinc-500">{cleanHomeMode ? 'Clean layout enabled' : 'Studio layout enabled'}</div>
           </div>
-
-          <button
-            onClick={() => {
-              onToggleCleanHomeMode();
-            }}
-            className={`px-3 py-1 rounded-none text-xs font-bold transition-all border-2 uppercase flex items-center gap-1 cursor-pointer active:scale-95 ${
-              cleanHomeMode
-                ? 'bg-black text-cyan-300 border-cyan-400 hover:bg-neutral-900'
-                : 'bg-white text-black border-white hover:bg-neutral-200'
-            }`}
-          >
-            {cleanHomeMode ? 'Bật Studio' : 'Dọn Sạch Home'}
+          <button onClick={onToggleCleanHomeMode} className="xbo-mode-switch shrink-0 rounded-lg border border-zinc-700 px-3 py-2 text-[11px] font-semibold text-zinc-200 transition hover:bg-zinc-800">
+            {cleanHomeMode ? 'Enable Studio' : 'Enable Clean'}
           </button>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex border-b-2 border-neutral-800 bg-black text-xs font-bold">
-          <button
-            onClick={() => setActiveTab('utilities')}
-            className={`flex-1 py-2.5 px-3 text-center border-b-2 transition-colors cursor-pointer flex items-center justify-center gap-1.5 rounded-none uppercase ${
-              activeTab === 'utilities'
-                ? 'border-cyan-400 text-cyan-300 font-extrabold bg-neutral-950'
-                : 'border-transparent text-neutral-400 hover:text-white'
-            }`}
-          >
-            <Zap className="w-3.5 h-3.5" />
-            Tiện Ích
-          </button>
-          <button
-            onClick={() => setActiveTab('files')}
-            className={`flex-1 py-2.5 px-3 text-center border-b-2 transition-colors cursor-pointer flex items-center justify-center gap-1.5 rounded-none uppercase ${
-              activeTab === 'files'
-                ? 'border-cyan-400 text-cyan-300 font-extrabold bg-neutral-950'
-                : 'border-transparent text-neutral-400 hover:text-white'
-            }`}
-          >
-            <Folder className="w-3.5 h-3.5" />
-            Dự Án
-          </button>
-          <button
-            onClick={() => setActiveTab('sessions')}
-            className={`flex-1 py-2.5 px-3 text-center border-b-2 transition-colors cursor-pointer flex items-center justify-center gap-1.5 rounded-none uppercase ${
-              activeTab === 'sessions'
-                ? 'border-cyan-400 text-cyan-300 font-extrabold bg-neutral-950'
-                : 'border-transparent text-neutral-400 hover:text-white'
-            }`}
-          >
-            <Database className="w-3.5 h-3.5" />
-            Phiên Run
-          </button>
-          <button
-            onClick={() => setActiveTab('system')}
-            className={`flex-1 py-2.5 px-3 text-center border-b-2 transition-colors cursor-pointer flex items-center justify-center gap-1.5 rounded-none uppercase ${
-              activeTab === 'system'
-                ? 'border-cyan-400 text-cyan-300 font-extrabold bg-neutral-950'
-                : 'border-transparent text-neutral-400 hover:text-white'
-            }`}
-          >
-            <Activity className="w-3.5 h-3.5" />
-            Hệ Thống
-          </button>
+        <div className="xbo-infra-nav px-3 py-3">
+          <div className="mb-2 px-2 text-[10px] font-semibold uppercase tracking-[.14em] text-zinc-500">Infrastructure</div>
+          <div className="grid grid-cols-2 gap-1.5">
+            {([
+              { id: 'utilities', label: 'Overview', icon: <Zap className="h-4 w-4" /> },
+              { id: 'files', label: 'Projects', icon: <Folder className="h-4 w-4" /> },
+              { id: 'sessions', label: 'Deployments', icon: <Database className="h-4 w-4" /> },
+              { id: 'system', label: 'Settings', icon: <Sliders className="h-4 w-4" /> }
+            ] as const).map(item => (
+              <button key={item.id} onClick={() => setActiveTab(item.id)} aria-current={activeTab === item.id ? 'page' : undefined}
+                className={`flex min-h-10 items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium transition ${activeTab === item.id ? 'bg-zinc-800 text-white ring-1 ring-zinc-700' : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100'}`}>
+                {item.icon}<span>{item.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Tab Content Body */}
@@ -199,6 +146,24 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           {/* TAB 1: ESSENTIAL UTILITIES */}
           {activeTab === 'utilities' && (
             <div className="space-y-4">
+            <div className="xbo-nested-nav">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-[.14em] text-zinc-500">Overview / Controls</div>
+              <div className="mb-4 grid grid-cols-3 gap-1 rounded-xl border border-zinc-800 bg-zinc-950 p-1">
+                {([
+                  { id: 'actions', label: 'Quick actions' },
+                  { id: 'reports', label: 'Reports' },
+                  { id: 'terminal', label: 'Terminal' }
+                ] as const).map(item => (
+                  <button key={item.id} onClick={() => setActiveUtilityTab(item.id)} aria-pressed={activeUtilityTab === item.id}
+                    className={`min-h-9 rounded-lg px-2 text-[10px] font-medium transition ${activeUtilityTab === item.id ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-200'}`}>
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+              {activeUtilityTab === 'actions' && (
+                <>
               <div>
                 <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> Lệnh Chạy Nhanh (Quick Actions)
@@ -282,6 +247,10 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 </div>
               </div>
 
+                </>
+              )}
+              {activeUtilityTab === 'reports' && (
+                <>
               {/* Data Export Shortcuts */}
               <div>
                 <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
@@ -321,6 +290,10 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 </div>
               </div>
 
+                </>
+              )}
+              {activeUtilityTab === 'terminal' && (
+                <>
               {/* Terminal Session Controls */}
               <div>
                 <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
@@ -349,6 +322,8 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                   </button>
                 </div>
               </div>
+                </>
+              )}
             </div>
           )}
 
