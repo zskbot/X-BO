@@ -82,6 +82,13 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
       setMessages(prev => [...prev, { role: 'assistant', content, workspaceMode }]);
       setStatus({ type: 'info', text: workspaceMode === 'plan' ? 'Đã nhận kế hoạch đề xuất; chưa sửa file hay triển khai.' : 'Đã nhận phản hồi từ agent.' });
     } catch (err) {
+      // Keep the prompt available for retry without leaving a duplicate failed message in history.
+      setMessages(prev => {
+        const lastMessage = prev[prev.length - 1];
+        return lastMessage?.role === 'user' && lastMessage.content === trimmed
+          ? prev.slice(0, -1)
+          : prev;
+      });
       setInput(trimmed);
       setStatus({ type: 'error', text: err instanceof Error ? err.message : 'Lỗi khi gọi agent.' });
     } finally {
