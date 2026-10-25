@@ -51,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="hidden text-xs font-medium sm:inline">Menu</span>
           </button>
           <div className="flex min-w-0 items-center gap-2">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-xs font-black tracking-tight text-zinc-950">X</div>
+            <img src={`${import.meta.env.BASE_URL}xbo-logo.svg`} alt="X-BO" className="h-9 w-9 shrink-0 rounded-xl object-contain" width="36" height="36" />
             <div className="min-w-0 leading-tight">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold tracking-tight text-zinc-100">X-BO</span>
