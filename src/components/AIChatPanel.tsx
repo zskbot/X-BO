@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { requestChat } from '../lib/xbo-chat-client.js';
 import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
 
 const MODEL_OPTIONS = [
@@ -49,6 +50,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     }
   ]);
   const [input, setInput] = useState('');
+  const [workspaceMode, setWorkspaceMode] = useState<'chat' | 'plan'>('chat');
   const [status, setStatus] = useState<{ type: 'info' | 'error'; text: string } | null>({
     type: 'info',
     text: 'Kết quả phụ thuộc API server và provider credentials đã cấu hình.'
@@ -67,28 +69,19 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     setStatus(null);
 
     try {
-      const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
-      const response = await fetch(`${apiBase}/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: trimmed, model: selectedModel })
+      const requestMessage = workspaceMode === 'plan'
+        ? `Yêu cầu sản phẩm: ${trimmed}\n\nHãy lập kế hoạch gồm mục tiêu, giả định, file dự kiến, tác vụ theo thứ tự, kiểm thử, rủi ro/bảo mật và tiêu chí nghiệm thu. Không tuyên bố đã tạo/sửa file và không triển khai production.`
+        : trimmed;
+      const content = await requestChat({
+        message: requestMessage,
+        model: selectedModel,
+        apiBase: import.meta.env.VITE_API_BASE_URL || ''
       });
-
-      if (!response.ok) {
-        const detail = (await response.text()).trim().slice(0, 500);
-        throw new Error(detail || `API trả về HTTP ${response.status}. Kiểm tra backend và provider.`);
-      }
-
-      const data = await response.json();
-      const content = data.response || data.result || 'API đã phản hồi nhưng không có nội dung.';
       setMessages(prev => [...prev, { role: 'assistant', content }]);
-      setStatus({ type: 'info', text: 'Đã nhận phản hồi từ agent.' });
+      setStatus({ type: 'info', text: workspaceMode === 'plan' ? 'Đã nhận kế hoạch đề xuất; chưa sửa file hay triển khai.' : 'Đã nhận phản hồi từ agent.' });
     } catch (err) {
+      setInput(trimmed);
       setStatus({ type: 'error', text: err instanceof Error ? err.message : 'Lỗi khi gọi agent.' });
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: 'Không thể nhận phản hồi từ agent. Kiểm tra API server, endpoint và cấu hình provider.'
-      }]);
     } finally {
       setIsSending(false);
     }
@@ -141,7 +134,12 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
           )}
         </div>
       </header>
-
+      <div className="flex flex-wrap items-center gap-2 border-b border-white/[0.07] bg-[#080a11] px-4 py-2 sm:px-6">
+        <span className="mr-1 text-[10px] uppercase tracking-wider text-neutral-600">Workspace</span>
+        <button type="button" onClick={() => setWorkspaceMode('chat')} aria-pressed={workspaceMode === 'chat'} className={`border px-3 py-1.5 text-xs ${workspaceMode === 'chat' ? 'border-indigo-400/40 bg-indigo-400/10 text-indigo-200' : 'border-white/10 text-neutral-400'}`}>Chat</button>
+        <button type="button" onClick={() => setWorkspaceMode('plan')} aria-pressed={workspaceMode === 'plan'} className={`border px-3 py-1.5 text-xs ${workspaceMode === 'plan' ? 'border-indigo-400/40 bg-indigo-400/10 text-indigo-200' : 'border-white/10 text-neutral-400'}`}>Lập kế hoạch</button>
+        <span className="ml-auto text-[10px] text-neutral-600">{workspaceMode === 'plan' ? 'Đề xuất · không tự sửa file' : 'Trao đổi với AI provider'}</span>
+      </div>
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         {isWelcome ? (
           <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-4 py-8 sm:px-8 sm:py-12">
@@ -203,7 +201,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
             </div>
           </main>
         ) : (
-          <section className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-6 sm:px-8">
+          <section aria-live="polite" aria-relevant="additions text" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-6 sm:px-8">
             <div className="mb-1 flex items-center gap-2 text-xs text-neutral-500"><Sparkles size={14} className="text-indigo-300" /> x-bo conversation</div>
             {messages.filter(message => message.role !== 'system').map((message, index) => (
               <article key={`${message.role}-${index}`} className={`max-w-[92%] border p-4 sm:max-w-[85%] ${message.role === 'user' ? 'ml-auto border-indigo-400/20 bg-indigo-400/[0.08]' : 'border-white/10 bg-white/[0.025]'}`}>
@@ -220,7 +218,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
 
       {!isWelcome && (
         <div className="border-t border-white/10 bg-[#090b13] px-4 py-4 sm:px-8">
-          {status && <div role="status" className={`mx-auto mb-3 max-w-4xl border px-3 py-2 text-xs ${status.type === 'error' ? 'border-rose-500/30 bg-rose-950/30 text-rose-200' : 'border-white/10 bg-white/[0.03] text-neutral-400'}`}>{status.text}</div>}
+          {status && <div role={status.type === 'error' ? 'alert' : 'status'} className={`mx-auto mb-3 max-w-4xl border px-3 py-2 text-xs ${status.type === 'error' ? 'border-rose-500/30 bg-rose-950/30 text-rose-200' : 'border-white/10 bg-white/[0.03] text-neutral-400'}`}>{status.text}</div>}
           <div className="mx-auto flex max-w-4xl items-end gap-2 border border-white/10 bg-[#0c0f18] p-2 focus-within:border-indigo-400/40">
             <textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
               placeholder="Tiếp tục yêu cầu hoặc tinh chỉnh ứng dụng..." aria-label="Tin nhắn cho x-bo"
