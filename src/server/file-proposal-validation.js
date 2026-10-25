@@ -15,7 +15,7 @@ const FORBIDDEN_SEGMENTS = new Set([
 function getPathError(path) {
   if (typeof path !== 'string' || !path.trim()) return 'A relative file path is required.';
   if (path.length > 240) return 'File path must be 240 characters or fewer.';
-  if (path.includes('\\') || path.includes('\0')) return 'Backslashes and NUL bytes are not allowed in file paths.';
+  if (path.includes(String.fromCharCode(92)) || path.includes(String.fromCharCode(0))) return 'Backslashes and NUL bytes are not allowed in file paths.';
   if (path.startsWith('/') || /^[a-zA-Z]:/.test(path) || path.startsWith('//')) {
     return 'Absolute paths are not allowed.';
   }
