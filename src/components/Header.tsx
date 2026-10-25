@@ -51,13 +51,13 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="hidden text-xs font-medium sm:inline">Menu</span>
           </button>
           <div className="flex min-w-0 items-center gap-2">
-            <img src={`${import.meta.env.BASE_URL}xbo-logo.svg`} alt="X-BO" className="h-9 w-9 shrink-0 rounded-xl object-contain" width="36" height="36" />
+            <img src="https://raw.githubusercontent.com/zskbot/X-BO/main/assets/app-icon-light-mode.png" alt="OCode.js" className="h-10 w-10 shrink-0 rounded-xl object-contain" width="40" height="40" />
             <div className="min-w-0 leading-tight">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold tracking-tight text-zinc-100">X-BO</span>
-                <span className="hidden text-xs text-zinc-500 sm:inline">by OCODE.js</span>
+                <span className="text-sm font-semibold tracking-tight text-zinc-100">OCode.js</span>
+                
               </div>
-              <p className="hidden truncate pt-1 text-[11px] text-zinc-500 sm:block">AI workspace</p>
+              
             </div>
           </div>
         </div>

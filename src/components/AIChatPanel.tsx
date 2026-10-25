@@ -55,10 +55,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
   ]);
   const [input, setInput] = useState('');
   const [workspaceMode, setWorkspaceMode] = useState<'chat' | 'plan'>('chat');
-  const [status, setStatus] = useState<{ type: 'info' | 'error'; text: string } | null>({
-    type: 'info',
-    text: 'Kết quả phụ thuộc API server và provider credentials đã cấu hình.'
-  });
+  const [status, setStatus] = useState<{ type: 'info' | 'error'; text: string } | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [showProviderMenu, setShowProviderMenu] = useState(false);
   const [copiedMessage, setCopiedMessage] = useState<number | null>(null);
@@ -149,54 +146,35 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
 
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         {isWelcome ? (
-          <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-4 py-8 sm:px-8 sm:py-12">
-
-
-            <div className="xbo-composer mt-8 border p-3 shadow-[0_18px_70px_rgba(31,41,90,0.12)] sm:p-4">
-              <label htmlFor="xbo-prompt" className="sr-only">Mô tả ứng dụng muốn xây dựng</label>
-              <textarea id="xbo-prompt" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-                placeholder="Ask x-bo to build... Ví dụ: Tạo dashboard quản lý doanh thu dạng Dark Mode sử dụng OCODE.js."
-                className="min-h-[104px] w-full resize-y bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-neutral-600 sm:min-h-[116px]" />
-              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] pt-3">
-                <div className="flex flex-wrap items-center gap-2 text-[11px] text-neutral-500">
-                  <span className="flex items-center gap-1.5"><PanelLeft size={13} /> Prompt-first</span>
-                  <span className="text-neutral-700">/</span>
-                  <span>OCODE.js workflow</span>
+          <main className="ocode-home mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-4 py-8 sm:px-8">
+            <div className="ocode-home-content mx-auto w-full">
+              <a className="ocode-plan-pill" href="https://github.com/zskbot/X-BO" target="_blank" rel="noreferrer" aria-label="OCode.js on GitHub">
+                <img src="https://raw.githubusercontent.com/zskbot/X-BO/main/assets/app-icon-light-mode.png" alt="" width="22" height="22" />
+                <span>Build with <strong>OCode.js</strong></span>
+                <Code2 size={15} aria-hidden="true" />
+              </a>
+              <h1 className="ocode-home-title">What do you want to create?</h1>
+              <div className="ocode-prompt-box">
+                <label htmlFor="xbo-prompt" className="sr-only">Mô tả ứng dụng muốn xây dựng</label>
+                <textarea id="xbo-prompt" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
+                  placeholder="Ask OCode.js to build..."
+                  className="ocode-prompt-input" />
+                <div className="ocode-prompt-toolbar">
+                  <span className="ocode-prompt-hint">Prompt-first · OCode.js workflow</span>
+                  <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending}
+                    className="ocode-send-button" aria-label={isSending ? 'Đang gửi yêu cầu' : 'Gửi yêu cầu'}>
+                    {isSending ? 'Đang gửi...' : <><span className="hidden sm:inline">Bắt đầu</span><ArrowUp size={18} /></>}
+                  </button>
                 </div>
-                <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending}
-                  className="flex items-center gap-2 bg-indigo-400 px-4 py-2.5 text-xs font-semibold text-[#080a10] transition hover:bg-indigo-300 disabled:cursor-not-allowed disabled:opacity-40">
-                  {isSending ? 'Đang gửi...' : 'Bắt đầu'} <ArrowUp size={15} />
-                </button>
               </div>
-            </div>
-
-            <div className="mt-8">
-              <div className="mb-3 flex items-center justify-between">
-                <h2 className="text-xs font-semibold text-neutral-300">Start with a template</h2>
-                <span className="text-[10px] text-neutral-600">Chọn mẫu để điền prompt</span>
-              </div>
-              <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-                {STARTER_PROMPTS.map(template => {
-                  const Icon = template.icon;
-                  return (
-                    <button key={template.title} type="button" onClick={() => useTemplate(template.prompt)}
-                      className="xbo-starter-card group border p-4 text-left transition">
-                      <div className="mb-4 flex h-9 w-9 items-center justify-center border border-white/10 bg-white/[0.03] text-neutral-300 group-hover:border-indigo-400/30 group-hover:text-indigo-200">
-                        <Icon size={17} />
-                      </div>
-                      <div className="text-sm font-medium text-neutral-100">{template.title}</div>
-                      <div className="mt-1.5 text-xs leading-5 text-neutral-500">{template.description}</div>
-                      <div className="mt-4 text-[10px] font-medium uppercase tracking-wider text-indigo-300/80">Use template ↗</div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/[0.07] pt-4 text-[11px] text-neutral-600">
-              <span className="flex items-center gap-1.5"><Code2 size={13} /> Code workflow</span>
-              <span className="flex items-center gap-1.5"><Github size={13} /> GitHub integration planned</span>
-              <span className="flex items-center gap-1.5"><Bot size={13} /> Provider-ready architecture</span>
+              <button type="button" onClick={() => useTemplate(STARTER_PROMPTS[0].prompt)} className="ocode-template-card">
+                <span className="ocode-template-icon"><Sparkles size={21} /></span>
+                <span className="ocode-template-copy">
+                  <strong>Start with a template</strong>
+                  <small>Build faster with a ready-to-customize starting point.</small>
+                </span>
+                <span className="ocode-template-arrow" aria-hidden="true">›</span>
+              </button>
             </div>
           </main>
         ) : (
@@ -233,11 +211,6 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
       )}
 
       <nav className="xbo-bottom-nav mx-auto grid w-full max-w-4xl grid-cols-5 sm:hidden" aria-label="Điều hướng nhanh"><span className="selected"><MessageSquare size={17}/><small>Chat</small></span><span><LayoutDashboard size={17}/><small>Templates</small></span><span><Code2 size={17}/><small>Workspace</small></span><span><Sparkles size={17}/><small>Deploy</small></span><a href="https://github.com/zskbot/X-BO" target="_blank" rel="noreferrer"><Github size={17}/><small>GitHub</small></a></nav>
-      {isWelcome && status && (
-        <div role="status" className={`border-t px-4 py-2 text-center text-[11px] ${status.type === 'error' ? 'border-rose-500/20 bg-rose-950/20 text-rose-200' : 'border-white/[0.06] bg-[#090b13] text-neutral-600'}`}>
-          {status.text}
-        </div>
-      )}
     </div>
   );
 };

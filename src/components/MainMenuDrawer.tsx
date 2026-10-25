@@ -91,17 +91,10 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
         {/* Drawer Header */}
         <div className="p-4 sm:p-5 bg-black border-b-2 border-neutral-800 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-none bg-neutral-900 border-2 border-cyan-500 flex items-center justify-center text-cyan-300 font-bold">
-              <Layers className="w-5 h-5" />
-            </div>
+            <img src="https://raw.githubusercontent.com/zskbot/X-BO/main/assets/app-icon-light-mode.png" alt="OCode.js" className="h-10 w-10 rounded-xl object-contain" width="40" height="40" />
             <div>
-              <h2 className="text-sm font-extrabold tracking-tight text-white flex items-center gap-2">
-                Watson Main Menu
-                <span className="px-2 py-0.5 rounded-none text-[9px] bg-neutral-900 text-cyan-300 font-mono font-bold border border-cyan-500/50">
-                  v4.0
-                </span>
-              </h2>
-              <p className="text-[11px] text-neutral-400 font-medium">Tiện Ích & Bố Cục Hệ Thống</p>
+              <h2 className="text-base font-semibold tracking-tight text-white">OCode.js</h2>
+              <p className="text-xs text-neutral-500 font-sans">Ask OCode.js</p>
             </div>
           </div>
 
