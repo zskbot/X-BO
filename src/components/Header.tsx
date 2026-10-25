@@ -1,5 +1,8 @@
 import React from 'react';
-import { Menu, Archive, Share2, Github, ChevronDown, Columns, BookOpen, ListTodo, FileText, MessageCircle, FileSpreadsheet } from 'lucide-react';
+import {
+  Menu, Archive, Share2, Github, ChevronDown, Columns, BookOpen,
+  ListTodo, FileText, MessageCircle, FileSpreadsheet
+} from 'lucide-react';
 import { UserProfile, PushNotification } from '../types/shell';
 
 interface HeaderProps {
@@ -21,7 +24,6 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  user,
   notifications,
   onOpenAuth,
   onOpenNotifications,
@@ -38,176 +40,97 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleCleanHomeMode
 }) => {
   const unreadCount = notifications.filter(n => !n.read).length;
+  const navItems = [
+    { id: 'chat' as const, label: 'Chat' },
+    { id: 'diff' as const, label: 'Diff' },
+    { id: 'logs' as const, label: 'Nhật ký' },
+    { id: 'rfc' as const, label: 'RFC Specs' }
+  ];
 
   return (
-    <div className="bg-black border-b-2 border-neutral-800 sticky top-0 z-30 select-none font-mono">
-      {/* Top Main Navigation Header */}
-      <header className="flex items-center justify-between px-3 sm:px-6 py-2">
-        {/* Left: menu Button (Sharp rectangular button) */}
-        <button
-          onClick={onToggleMainMenu}
-          className="flex items-center space-x-2 px-3 py-1.5 bg-black hover:bg-neutral-900 text-white rounded-none border-2 border-neutral-700 hover:border-cyan-400 transition-all duration-150 cursor-pointer active:scale-95 group font-bold"
-          title="Mở Menu 3 Gạch"
-        >
-          <Menu className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
-          <span className="font-extrabold text-xs uppercase tracking-wider text-white">menu</span>
-        </button>
+    <div className="sticky top-0 z-30 select-none border-b border-zinc-800/80 bg-[#09090b]/95 font-sans backdrop-blur-xl">
+      <header className="flex min-h-[60px] items-center justify-between gap-3 px-3 py-2 sm:px-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <button
+            type="button"
+            onClick={onToggleMainMenu}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/80 text-zinc-200 transition hover:border-zinc-600 hover:bg-zinc-800 sm:w-auto sm:gap-2 sm:px-3"
+            title="Mở Menu 3 Gạch"
+            aria-label="Mở menu"
+          >
+            <Menu className="h-5 w-5" />
+            <span className="hidden text-xs font-medium sm:inline">Menu</span>
+          </button>
+          <div className="flex min-w-0 items-center gap-2">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-xs font-black tracking-tight text-zinc-950">X</div>
+            <div className="min-w-0 leading-tight">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold tracking-tight text-zinc-100">X-BO</span>
+                <span className="hidden text-xs text-zinc-500 sm:inline">by OCODE.js</span>
+              </div>
+              <p className="hidden truncate pt-1 text-[11px] text-zinc-500 sm:block">AI workspace</p>
+            </div>
+          </div>
+        </div>
 
-        {/* Right Action Icons & GitHub Dropdown */}
-        <div className="flex items-center space-x-2">
-          {/* Google Chat Button */}
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {onOpenGoogleChat && (
-            <button
-              onClick={onOpenGoogleChat}
-              className="flex items-center space-x-1.5 px-2.5 py-1 bg-black border-2 border-cyan-400 text-cyan-300 hover:bg-cyan-400 hover:text-black font-extrabold text-xs transition-all cursor-pointer shadow-[0_0_8px_rgba(34,211,238,0.3)] active:scale-95 uppercase"
-              title="Mở Google Chat"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">Google Chat</span>
+            <button type="button" onClick={onOpenGoogleChat} className="hidden h-9 items-center gap-2 rounded-lg border border-zinc-800 px-3 text-xs text-zinc-300 transition hover:bg-zinc-800 lg:flex" title="Mở Google Chat">
+              <MessageCircle className="h-4 w-4" /><span>Chat</span>
             </button>
           )}
-
-          {/* Google Forms Button */}
           {onOpenGoogleForms && (
-            <button
-              onClick={onOpenGoogleForms}
-              className="flex items-center space-x-1.5 px-2.5 py-1 bg-black border-2 border-cyan-400 text-cyan-300 hover:bg-cyan-400 hover:text-black font-extrabold text-xs transition-all cursor-pointer shadow-[0_0_8px_rgba(34,211,238,0.3)] active:scale-95 uppercase"
-              title="Mở Google Forms"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">Google Forms</span>
+            <button type="button" onClick={onOpenGoogleForms} className="hidden h-9 items-center gap-2 rounded-lg border border-zinc-800 px-3 text-xs text-zinc-300 transition hover:bg-zinc-800 xl:flex" title="Mở Google Forms">
+              <FileSpreadsheet className="h-4 w-4" /><span>Forms</span>
             </button>
           )}
-
-          {/* Google Docs Button */}
           {onOpenGoogleDocs && (
-            <button
-              onClick={onOpenGoogleDocs}
-              className="flex items-center space-x-1.5 px-2.5 py-1 bg-cyan-400 text-black hover:bg-cyan-300 font-extrabold text-xs transition-all cursor-pointer shadow-[0_0_10px_rgba(34,211,238,0.4)] active:scale-95 uppercase border-2 border-cyan-300"
-              title="Mở Google Docs"
-            >
-              <FileText className="w-3.5 h-3.5 text-black stroke-[2.5]" />
-              <span className="hidden sm:inline">Google Docs</span>
+            <button type="button" onClick={onOpenGoogleDocs} className="hidden h-9 items-center gap-2 rounded-lg border border-zinc-800 px-3 text-xs text-zinc-300 transition hover:bg-zinc-800 lg:flex" title="Mở Google Docs">
+              <FileText className="h-4 w-4" /><span>Docs</span>
             </button>
           )}
-
-          {/* Google Tasks Button */}
           {onOpenGoogleTasks && (
-            <button
-              onClick={onOpenGoogleTasks}
-              className="flex items-center space-x-1.5 px-2.5 py-1 bg-black border-2 border-cyan-400 text-cyan-300 hover:bg-cyan-400 hover:text-black font-extrabold text-xs transition-all cursor-pointer shadow-[0_0_8px_rgba(34,211,238,0.3)] active:scale-95 uppercase"
-              title="Mở Google Tasks"
-            >
-              <ListTodo className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Google Tasks</span>
+            <button type="button" onClick={onOpenGoogleTasks} className="hidden h-9 items-center gap-2 rounded-lg border border-zinc-800 px-3 text-xs text-zinc-300 transition hover:bg-zinc-800 xl:flex" title="Mở Google Tasks">
+              <ListTodo className="h-4 w-4" /><span>Tasks</span>
             </button>
           )}
-
-          {/* RFC Editor Badge Link */}
-          <a
-            href="https://www.rfc-editor.org/"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden md:flex items-center space-x-1 px-2.5 py-1 bg-black border-2 border-neutral-700 hover:border-cyan-400 text-xs text-cyan-300 font-bold font-mono transition-colors"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
-            <span>rfc-editor.org</span>
-          </a>
-
-          {/* Archive / Storage Icon Button */}
-          <button
-            onClick={onManualSync}
-            className="p-1.5 bg-black hover:bg-neutral-900 text-white rounded-none border-2 border-neutral-700 hover:border-neutral-500 transition-all cursor-pointer active:scale-95"
-            title="Kiểm tra trạng thái đồng bộ"
-          >
-            <Archive className="w-4 h-4 text-neutral-300" />
+          <button type="button" onClick={onManualSync} disabled={isSyncing} className="hidden h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/70 text-zinc-300 transition hover:bg-zinc-800 disabled:opacity-50 sm:flex" title="Kiểm tra trạng thái đồng bộ" aria-label="Đồng bộ">
+            <Archive className="h-4 w-4" />
           </button>
-
-          {/* Share / Export Icon Button */}
-          <button
-            onClick={onOpenNotifications}
-            className="relative p-1.5 bg-black hover:bg-neutral-900 text-white rounded-none border-2 border-neutral-700 hover:border-neutral-500 transition-all cursor-pointer active:scale-95"
-            title="Thông báo"
-          >
-            <Share2 className="w-4 h-4 text-neutral-300" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-cyan-400 rounded-none animate-pulse border border-black"></span>
-            )}
+          <button type="button" onClick={onOpenNotifications} className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/70 text-zinc-300 transition hover:bg-zinc-800" title="Thông báo" aria-label="Thông báo">
+            <Share2 className="h-4 w-4" />
+            {unreadCount > 0 && <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-white ring-2 ring-zinc-900" />}
           </button>
-
-          {/* GitHub User Button (Sharp rectangular button) */}
-          <button
-            onClick={onOpenAuth}
-            className="flex items-center space-x-2 px-3 py-1 bg-white text-black hover:bg-neutral-200 rounded-none font-extrabold text-xs transition-all cursor-pointer border-2 border-white active:scale-95"
-            title="Tài khoản GitHub"
-          >
-            <Github className="w-4 h-4 text-black" />
-            <ChevronDown className="w-3.5 h-3.5 text-neutral-800" />
+          <button type="button" onClick={onOpenAuth} className="flex h-10 items-center gap-2 rounded-xl bg-zinc-100 px-3 text-xs font-semibold text-zinc-950 transition hover:bg-white" title="Tài khoản GitHub">
+            <Github className="h-4 w-4" /><span className="hidden sm:inline">GitHub</span><ChevronDown className="hidden h-3.5 w-3.5 sm:block" />
           </button>
         </div>
       </header>
 
-      {/* Sub Header Navigation Tabs Bar (Cuộc trò chuyện | Diff | Nhật ký | RFC Specs) */}
-      <div className="flex items-center justify-between px-3 sm:px-6 border-t-2 border-neutral-800 bg-black text-xs py-1.5">
-        <div className="flex items-center space-x-2 sm:space-x-3 overflow-x-auto no-scrollbar">
-          <button
-            onClick={() => onChangeNavTab('chat')}
-            className={`px-2.5 py-1 font-extrabold uppercase tracking-wider text-[11px] transition-all cursor-pointer whitespace-nowrap border-2 rounded-none ${
-              activeNavTab === 'chat'
-                ? 'bg-cyan-400 text-black border-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.5)]'
-                : 'bg-black text-neutral-300 border-neutral-800 hover:border-neutral-600 hover:text-white'
-            }`}
-          >
-            Cuộc trò chuyện
-          </button>
-
-          <button
-            onClick={() => onChangeNavTab('diff')}
-            className={`px-2.5 py-1 font-extrabold uppercase tracking-wider text-[11px] transition-all cursor-pointer whitespace-nowrap border-2 rounded-none ${
-              activeNavTab === 'diff'
-                ? 'bg-cyan-400 text-black border-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.5)]'
-                : 'bg-black text-neutral-300 border-neutral-800 hover:border-neutral-600 hover:text-white'
-            }`}
-          >
-            Diff
-          </button>
-
-          <button
-            onClick={() => onChangeNavTab('logs')}
-            className={`px-2.5 py-1 font-extrabold uppercase tracking-wider text-[11px] transition-all cursor-pointer whitespace-nowrap border-2 rounded-none ${
-              activeNavTab === 'logs'
-                ? 'bg-cyan-400 text-black border-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.5)]'
-                : 'bg-black text-neutral-300 border-neutral-800 hover:border-neutral-600 hover:text-white'
-            }`}
-          >
-            Nhật ký
-          </button>
-
-          <button
-            onClick={() => onChangeNavTab('rfc')}
-            className={`px-2.5 py-1 font-extrabold uppercase tracking-wider text-[11px] transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap border-2 rounded-none ${
-              activeNavTab === 'rfc'
-                ? 'bg-cyan-400 text-black border-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.5)]'
-                : 'bg-black text-cyan-300 border-neutral-800 hover:border-cyan-400'
-            }`}
-          >
-            <BookOpen className={`w-3.5 h-3.5 ${activeNavTab === 'rfc' ? 'text-black' : 'text-cyan-400'}`} />
-            <span>RFC Specs</span>
-          </button>
-        </div>
-
-        {/* Right Split View Toggle Icon */}
+      <div className="flex items-center justify-between gap-3 border-t border-zinc-800/60 px-3 py-2 sm:px-6">
+        <nav aria-label="Điều hướng workspace" className="flex min-w-0 items-center gap-1 overflow-x-auto">
+          {navItems.map(item => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => onChangeNavTab(item.id)}
+              aria-current={activeNavTab === item.id ? 'page' : undefined}
+              className={`min-h-9 shrink-0 rounded-lg px-3 text-xs font-medium transition-colors ${activeNavTab === item.id ? 'bg-zinc-100 text-zinc-950' : 'text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100'}`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
         <button
+          type="button"
           onClick={onToggleCleanHomeMode}
-          className={`p-1.5 rounded-none border-2 transition-all cursor-pointer shrink-0 ml-2 ${
-            cleanHomeMode ? 'bg-black border-neutral-800 text-neutral-400 hover:text-white' : 'bg-cyan-950 border-cyan-700 text-cyan-300'
-          }`}
-          title={cleanHomeMode ? "Mở Bảng Phân Tích Song Song" : "Đóng Bảng Phân Tích"}
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-colors ${cleanHomeMode ? 'border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100' : 'border-zinc-600 bg-zinc-800 text-zinc-100'}`}
+          title={cleanHomeMode ? 'Mở Bảng Phân Tích Song Song' : 'Đóng Bảng Phân Tích'}
+          aria-label={cleanHomeMode ? 'Mở bảng phân tích' : 'Đóng bảng phân tích'}
         >
-          <Columns className="w-4 h-4" />
+          <Columns className="h-4 w-4" />
         </button>
       </div>
     </div>
   );
 };
-
