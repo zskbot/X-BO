@@ -452,3 +452,142 @@ header,
   .xbo-infra-nav button { min-height: 42px !important; }
   .xbo-nested-nav button { min-height: 38px !important; }
 }
+
+
+/* OCode.js reference home: pure black, centered prompt, quiet monochrome controls */
+:root { --xbo-bg: #000000; }
+html, body, #root, #root > div { background: #000 !important; }
+#root > div > div > header {
+  background: #000 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+#root > div > div > header > div:first-child > button[title="Mở Menu 3 Gạch"] {
+  min-width: 36px !important;
+  width: 36px !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+#root > div > div > header > div:first-child > div > div > p { display: none !important; }
+#root > div > div > header > div:first-child > div > div > div > span:first-child {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+.ocode-home {
+  background: #000 !important;
+  justify-content: center !important;
+  padding-top: 24px !important;
+  padding-bottom: max(28px, env(safe-area-inset-bottom)) !important;
+}
+.ocode-home-content { max-width: 780px; }
+.ocode-plan-pill {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 28px;
+  padding: 10px 15px;
+  border: 1px solid #303033;
+  border-radius: 999px;
+  background: #080808;
+  color: #e4e4e7;
+  font-size: 14px;
+  line-height: 1.3;
+  text-decoration: none;
+}
+.ocode-plan-pill img { width: 22px; height: 22px; object-fit: contain; border-radius: 5px; }
+.ocode-plan-pill strong { color: #fff; font-weight: 650; }
+.ocode-plan-pill svg { color: #a1a1aa; }
+.ocode-home-title {
+  margin: 0 0 28px;
+  color: #f4f4f5;
+  font-size: clamp(25px, 4.5vw, 42px);
+  line-height: 1.18;
+  letter-spacing: -.045em;
+  font-weight: 650;
+  text-align: center;
+}
+.ocode-prompt-box {
+  width: 100%;
+  border: 1px solid #303033;
+  border-radius: 22px;
+  background: #111111;
+  padding: 18px 18px 14px;
+  transition: border-color .15s ease;
+}
+.ocode-prompt-box:focus-within { border-color: #52525b; }
+#root textarea.ocode-prompt-input {
+  display: block;
+  width: 100%;
+  min-height: 96px;
+  max-height: 36dvh;
+  resize: vertical;
+  padding: 0 2px 18px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #f4f4f5 !important;
+  font-size: 16px;
+  line-height: 1.5;
+  outline: none;
+}
+#root textarea.ocode-prompt-input::placeholder { color: #85858b !important; }
+.ocode-prompt-toolbar {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid #242427;
+  padding-top: 12px;
+}
+.ocode-prompt-hint { color: #77777e; font-size: 11px; }
+.ocode-send-button {
+  display: inline-flex;
+  min-height: 40px !important;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #343438 !important;
+  border-radius: 11px !important;
+  background: #f4f4f5 !important;
+  color: #09090b !important;
+  padding: 0 14px !important;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ocode-send-button:disabled { opacity: .35; }
+.ocode-template-card {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+  padding: 18px !important;
+  border: 1px solid #242428 !important;
+  border-radius: 20px !important;
+  background: #050505 !important;
+  color: #e4e4e7 !important;
+  text-align: left;
+}
+.ocode-template-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; color: #d4d4d8; }
+.ocode-template-copy { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 6px; }
+.ocode-template-copy strong { font-size: 14px; font-weight: 550; }
+.ocode-template-copy small { color: #85858b; font-size: 12px; line-height: 1.5; }
+.ocode-template-arrow { color: #a1a1aa; font-size: 25px; line-height: 1; }
+@media (max-width: 640px) {
+  #root > div > div > header { padding: max(8px, env(safe-area-inset-top)) 14px 8px !important; }
+  .ocode-home { padding-left: 24px !important; padding-right: 24px !important; }
+  .ocode-plan-pill { margin-bottom: 26px; padding: 9px 13px; font-size: 13px; }
+  .ocode-home-title { margin-bottom: 28px; font-size: 28px; }
+  .ocode-prompt-box { padding: 17px 15px 13px; border-radius: 20px; }
+  #root textarea.ocode-prompt-input { min-height: 94px; font-size: 16px; }
+  .ocode-prompt-hint { max-width: 55%; font-size: 10px; }
+  .ocode-send-button { min-width: 42px; padding: 0 12px !important; }
+  .ocode-template-card { margin-top: 20px; padding: 16px !important; }
+}
