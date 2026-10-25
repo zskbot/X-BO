@@ -75,7 +75,7 @@ export function validateFileProposals(input) {
     if (typeof item.content !== 'string') {
       return { error: { code: 'INVALID_CONTENT', index, message: 'File content must be a string.' } };
     }
-    if (item.content.includes('\0')) {
+    if (item.content.includes(String.fromCharCode(0))) {
       return { error: { code: 'INVALID_CONTENT', index, message: 'NUL bytes are not allowed in text proposals.' } };
     }
 
