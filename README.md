@@ -3,13 +3,7 @@
   <img src="assets/xbo3.png" width="180" alt="X-BO Bot">
 </p>
 
-<h1 align="center">X-BO<img width="480" height="480" alt="image" src="https://github.com/user-attachments/assets/2ed01241-a27c-43ad-8d26-5009ecdf5e4a" />
- «Bot»</h1>
-
-<p align="center">
-  <strong>One chat. More ways to get work done.</strong>
-</p>
-
+<h1 align="center">X-BO Bot</h1>
 
 <p align="center">
   <strong>One chat. More ways to get work done.</strong><br />
@@ -42,7 +36,13 @@ X-BO is an AI-agent web application built around a simple idea: make it easy to 
 - [Contributing](#contributing)
 - [License](#license)
 
-## Product direction: x-bo by OCODE.js\n\nThe workspace is being evolved toward a prompt-first full-stack builder: start from a natural-language request or template, review planned work, inspect generated files and diffs, validate a real preview, and sync through a GitHub branch/PR workflow. The current UI includes a redesigned prompt-first chat entry and starter prompts; visual asset processing, generated-code preview/editor, GitHub write-back, and OCODE.js deployment must not be considered available until their integrations are implemented and tested.\n\n- **Builder architecture and UI specification:** [docs/XBO-OCODEJS-BUILDER.md](docs/XBO-OCODEJS-BUILDER.md)\n\n## Highlights
+## Product direction: X-BO by OCode.js
+
+The workspace is evolving toward a prompt-first full-stack builder: start from a natural-language request or template, review planned work, inspect generated files and diffs, validate a real preview, and sync through a GitHub branch/PR workflow. The current UI includes a redesigned prompt-first chat entry and starter prompts. Visual asset processing, generated-code preview/editor, GitHub write-back, and OCode.js deployment must not be considered available until their integrations are implemented and tested.
+
+- **Builder architecture and UI specification:** [docs/XBO-OCODEJS-BUILDER.md](docs/XBO-OCODEJS-BUILDER.md)
+
+## Highlights
 
 - **Chat streaming** — the Gemini chat endpoint can stream incremental response events using Server-Sent Events (SSE).
 - **Provider-ready architecture** — routing includes OpenAI, Claude, Gemini, Qwen, OHMABA, and the local `zsk` provider; availability depends on each provider's implementation and configuration.
