@@ -16,9 +16,10 @@ describe('validateLegacyChatRequest', () => {
     expect(validateLegacyChatRequest({ message: 'x'.repeat(8001) }).error.status).toBe(413);
   });
 
-  it('rejects unknown and malformed providers', () => {
+  it('rejects unknown, malformed, and non-string providers', () => {
     expect(validateLegacyChatRequest({ message: 'hello', model: 'unknown' }).error.code).toBe('INVALID_PROVIDER');
     expect(validateLegacyChatRequest({ message: 'hello', model: 'gemini;process' }).error.status).toBe(400);
+    expect(validateLegacyChatRequest({ message: 'hello', model: 42 }).error.code).toBe('INVALID_PROVIDER');
   });
 
   it('allows an omitted provider to use the configured default', () => {
