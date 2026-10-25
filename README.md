@@ -1,9 +1,9 @@
 
 <p align="center">
-  <img src="assets/xbo3.png" width="180" alt="X-BO Bot">
+  <img src="https://raw.githubusercontent.com/zskbot/ask-ocodejs/main/assets/app-icon-light-mode.png" width="112" alt="Ask OCode.js logo">
 </p>
 
-<h1 align="center">X-BO Bot</h1>
+<h1 align="center">Ask OCode.js</h1>
 
 <p align="center">
   <strong>One chat. More ways to get work done.</strong><br />
@@ -11,14 +11,14 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/zskbot/X-BO"><img alt="Repository" src="https://img.shields.io/badge/GitHub-zskbot%2FX--BO-111827?style=flat-square&logo=github"></a>
+  <a href="https://github.com/zskbot/ask-ocodejs"><img alt="Repository" src="https://img.shields.io/badge/GitHub-zskbot%2Fask--ocodejs-111827?style=flat-square&logo=github"></a>
   <img alt="React" src="https://img.shields.io/badge/React-18-149ECA?style=flat-square&logo=react&logoColor=white">
   <img alt="Vite" src="https://img.shields.io/badge/Vite-build-646CFF?style=flat-square&logo=vite&logoColor=white">
   <img alt="Node.js" src="https://img.shields.io/badge/Node.js-18%2B-43853D?style=flat-square&logo=nodedotjs&logoColor=white">
   <img alt="License" src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square">
 </p>
 
-X-BO is an AI-agent web application built around a simple idea: make it easy to talk to an AI, stream its response, and connect the experience to different model providers. The repository includes a React/Vite frontend and a Node.js backend with chat API routes and provider routing.
+Ask OCode.js is an AI-agent web application built around a simple idea: make it easy to talk to an AI, stream its response, and connect the experience to different model providers. The repository includes a React/Vite frontend and a Node.js backend with chat API routes and provider routing.
 
 > **Project status:** Active development. Configure the required provider credentials before expecting AI responses in a deployed environment.
 
@@ -36,7 +36,7 @@ X-BO is an AI-agent web application built around a simple idea: make it easy to 
 - [Contributing](#contributing)
 - [License](#license)
 
-## Product direction: X-BO by OCode.js
+## Product direction: Ask OCode.js
 
 The workspace is evolving toward a prompt-first full-stack builder: start from a natural-language request or template, review planned work, inspect generated files and diffs, validate a real preview, and sync through a GitHub branch/PR workflow. The current UI includes a redesigned prompt-first chat entry and starter prompts. Visual asset processing, generated-code preview/editor, GitHub write-back, and OCode.js deployment must not be considered available until their integrations are implemented and tested.
 
@@ -73,8 +73,8 @@ The workspace is evolving toward a prompt-first full-stack builder: start from a
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/zskbot/X-BO.git
-cd X-BO
+git clone https://github.com/zskbot/ask-ocodejs.git
+cd Ask OCode.js
 npm install
 ```
 
@@ -165,7 +165,7 @@ The API validates empty prompts and rejects messages longer than 12,000 characte
 
 The repository includes a `vercel.json` configuration for the static frontend and API functions.
 
-1. Import `zskbot/X-BO` into your hosting provider.
+1. Import `zskbot/Ask OCode.js` into your hosting provider.
 2. Configure the required environment variables in the provider's project settings.
 3. Run a preview/staging deployment first.
 4. Verify the chat API, provider credentials, and streaming behavior before promoting any release.
@@ -175,7 +175,7 @@ Do not put secrets in `vercel.json`, frontend variables, README examples, or com
 ## Project layout
 
 ```text
-X-BO/
+Ask OCode.js/
 ├── api/                 # Serverless API handlers
 ├── src/
 │   ├── agent/            # Agent runtime and system prompt
