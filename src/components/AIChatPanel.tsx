@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
+import { ArrowUp, Bot, Check, CheckCircle2, ChevronDown, Code2, Github, LayoutDashboard, ListChecks, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
+import { createBuildPlan } from '../utils/buildPlanner.js';
 
 const MODEL_OPTIONS = [
   { value: 'zsk', label: 'ZsK Free Agent' },
@@ -49,6 +50,8 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     }
   ]);
   const [input, setInput] = useState('');
+  const [showPlan, setShowPlan] = useState(false);
+  const buildPlan = createBuildPlan(input);
   const [status, setStatus] = useState<{ type: 'info' | 'error'; text: string } | null>({
     type: 'info',
     text: 'Kết quả phụ thuộc API server và provider credentials đã cấu hình.'
@@ -166,12 +169,43 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                   <span className="text-neutral-700">/</span>
                   <span>OCODE.js workflow</span>
                 </div>
-                <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending}
-                  className="flex items-center gap-2 bg-indigo-400 px-4 py-2.5 text-xs font-semibold text-[#080a10] transition hover:bg-indigo-300 disabled:cursor-not-allowed disabled:opacity-40">
-                  {isSending ? 'Đang gửi...' : 'Bắt đầu'} <ArrowUp size={15} />
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button type="button" onClick={() => setShowPlan(value => !value)} disabled={!input.trim()}
+                    aria-expanded={showPlan}
+                    className="flex items-center gap-2 border border-white/10 px-3 py-2.5 text-xs font-medium text-neutral-200 transition hover:border-indigo-400/40 disabled:cursor-not-allowed disabled:opacity-40">
+                    <ListChecks size={14} /> {showPlan ? 'Ẩn kế hoạch' : 'Lập kế hoạch'}
+                  </button>
+                  <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending}
+                    className="flex items-center gap-2 bg-indigo-400 px-4 py-2.5 text-xs font-semibold text-[#080a10] transition hover:bg-indigo-300 disabled:cursor-not-allowed disabled:opacity-40">
+                    {isSending ? 'Đang gửi...' : 'Gửi cho agent'} <ArrowUp size={15} />
+                  </button>
+                </div>
               </div>
             </div>
+
+            {showPlan && (
+              <section aria-label="Kế hoạch xây dựng sơ bộ" className="mt-4 border border-indigo-400/20 bg-indigo-400/[0.035] p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-semibold text-neutral-100"><ListChecks size={16} className="text-indigo-300" /> Kế hoạch đề xuất</div>
+                    <p className="mt-1 text-xs leading-5 text-neutral-500">Được tạo từ prompt tại trình duyệt. Đây là kế hoạch sơ bộ, chưa tạo hoặc sửa mã nguồn.</p>
+                  </div>
+                  <span className="shrink-0 border border-white/10 px-2 py-1 text-[10px] text-neutral-400">{buildPlan.length} bước</span>
+                </div>
+                <ol className="mt-4 space-y-3">
+                  {buildPlan.map((task, index) => (
+                    <li key={task.id} className="flex gap-3">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-indigo-400/25 text-[10px] text-indigo-200">{String(index + 1).padStart(2, '0')}</span>
+                      <div>
+                        <div className="text-xs font-medium text-neutral-200">{task.title}</div>
+                        <p className="mt-1 text-xs leading-5 text-neutral-500">{task.detail}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+                <div className="mt-4 flex items-center gap-2 border-t border-white/[0.07] pt-3 text-[11px] text-neutral-500"><CheckCircle2 size={13} className="text-indigo-300" /> Xem lại prompt rồi gửi cho agent khi sẵn sàng.</div>
+              </section>
+            )}
 
             <div className="mt-8">
               <div className="mb-3 flex items-center justify-between">
