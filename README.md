@@ -42,7 +42,7 @@ X-BO is an AI-agent web application built around a simple idea: make it easy to 
 - [Contributing](#contributing)
 - [License](#license)
 
-## Highlights
+## Product direction: x-bo by OCODE.js\n\nThe workspace is being evolved toward a prompt-first full-stack builder: start from a natural-language request or template, review planned work, inspect generated files and diffs, validate a real preview, and sync through a GitHub branch/PR workflow. The current UI includes a redesigned prompt-first chat entry and starter prompts; visual asset processing, generated-code preview/editor, GitHub write-back, and OCODE.js deployment must not be considered available until their integrations are implemented and tested.\n\n- **Builder architecture and UI specification:** [docs/XBO-OCODEJS-BUILDER.md](docs/XBO-OCODEJS-BUILDER.md)\n\n## Highlights
 
 - **Chat streaming** — the Gemini chat endpoint can stream incremental response events using Server-Sent Events (SSE).
 - **Provider-ready architecture** — routing includes OpenAI, Claude, Gemini, Qwen, OHMABA, and the local `zsk` provider; availability depends on each provider's implementation and configuration.
