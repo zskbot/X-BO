@@ -10,12 +10,6 @@
   A web-based AI agent with a focused chat experience, streaming responses, and a provider-ready backend.
 </p>
 
-
-<p align="center">
-  <strong>One chat. More ways to get work done.</strong><br />
-  A web-based AI agent with a focused chat experience, streaming responses, and a provider-ready backend.
-</p>
-
 <p align="center">
   <a href="https://github.com/zskbot/X-BO"><img alt="Repository" src="https://img.shields.io/badge/GitHub-zskbot%2FX--BO-111827?style=flat-square&logo=github"></a>
   <img alt="React" src="https://img.shields.io/badge/React-18-149ECA?style=flat-square&logo=react&logoColor=white">
