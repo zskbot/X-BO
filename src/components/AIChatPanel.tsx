@@ -123,39 +123,6 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
 
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[#070910] text-white">
-      <header className="flex items-center justify-between gap-3 border-b border-white/10 bg-[#090b13]/95 px-4 py-3 sm:px-6">
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-indigo-400/30 bg-indigo-500/10 text-indigo-200">
-            <Sparkles size={18} />
-          </div>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2 text-sm font-semibold tracking-tight">
-              <span>x-bo</span><span className="text-neutral-500">by</span><span className="text-indigo-300">OCODE.js</span>
-              <span className="border border-white/10 px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wider text-neutral-400">Preview</span>
-            </div>
-            <p className="mt-0.5 truncate text-[11px] text-neutral-500">AI full-stack builder · Prompt → Code → Preview</p>
-          </div>
-        </div>
-        <div className="relative flex shrink-0 items-center gap-2">
-          <span className="hidden text-[10px] uppercase tracking-wider text-neutral-500 sm:inline">Model</span>
-          <button type="button" onClick={() => setShowProviderMenu(v => !v)} aria-expanded={showProviderMenu}
-            className="flex items-center gap-2 border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-neutral-200 hover:border-indigo-400/50">
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
-            {MODEL_OPTIONS.find(option => option.value === selectedModel)?.label || selectedModel}
-            <ChevronDown size={13} className="text-neutral-500" />
-          </button>
-          {showProviderMenu && (
-            <div className="absolute right-0 top-full z-20 mt-2 w-52 border border-white/10 bg-[#11131d] p-1 shadow-2xl">
-              {MODEL_OPTIONS.map(option => (
-                <button key={option.value} type="button" onClick={() => { onSelectModel(option.value); setShowProviderMenu(false); }}
-                  className="flex w-full items-center justify-between px-3 py-2.5 text-left text-xs text-neutral-300 hover:bg-white/[0.06]">
-                  {option.label}{selectedModel === option.value && <Check size={14} className="text-indigo-300" />}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </header>
       <div className="flex flex-wrap items-center gap-2 border-b border-white/[0.07] bg-[#080a11] px-4 py-2 sm:px-6">
         <span className="mr-1 text-[10px] uppercase tracking-wider text-neutral-600">Workspace</span>
         <button type="button" onClick={() => setWorkspaceMode('chat')} aria-pressed={workspaceMode === 'chat'} className={`border px-3 py-1.5 text-xs ${workspaceMode === 'chat' ? 'border-indigo-400/40 bg-indigo-400/10 text-indigo-200' : 'border-white/10 text-neutral-400'}`}>Chat</button>
