@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { requestChat } from '../lib/xbo-chat-client.js';
 import { PlanChecklist } from './PlanChecklist.tsx';
+import { CodeProposalView } from './CodeProposalView.tsx';
 import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
 
 const MODEL_OPTIONS = [
@@ -217,7 +218,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                 <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
                   {message.role === 'user' ? 'You' : <><Bot size={13} className="text-indigo-300" /> x-bo agent</>}
                 </div>
-                <div className="text-sm leading-6 text-neutral-200">{message.role === 'assistant' && message.workspaceMode === 'plan' ? <PlanChecklist content={message.content} /> : <div className="whitespace-pre-wrap break-words">{message.content}</div>}</div>
+                <div className="text-sm leading-6 text-neutral-200">{message.role === 'assistant' && message.workspaceMode === 'plan' ? <PlanChecklist content={message.content} /> : message.role === 'assistant' ? <CodeProposalView content={message.content} /> : <div className="whitespace-pre-wrap break-words">{message.content}</div>}</div>
               </article>
             ))}
             {isSending && <div className="flex items-center gap-2 text-xs text-indigo-200"><span className="h-2 w-2 animate-pulse rounded-full bg-indigo-300" /> Đang chờ phản hồi từ agent…</div>}
