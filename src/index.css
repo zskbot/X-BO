@@ -215,3 +215,135 @@ header,
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
 }
+
+
+/* v0-inspired UI polish: quieter chrome, clearer hierarchy, mobile-first workspace */
+:root {
+  --xbo-bg: #09090b;
+  --xbo-panel: #111113;
+  --xbo-panel-raised: #18181b;
+  --xbo-border: #27272a;
+  --xbo-muted: #a1a1aa;
+}
+#root > div > div > header {
+  min-height: 60px;
+  padding: 10px 16px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #27272a !important;
+  background: rgba(9,9,11,.94) !important;
+}
+#root > div > div > header button[title="Mở Menu 3 Gạch"] {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px !important;
+  border: 1px solid #303036 !important;
+  background: #111113 !important;
+}
+#root > div > div > header button[title="Mở Menu 3 Gạch"] svg {
+  color: #e4e4e7 !important;
+}
+#root > div > div > header button[title="Mở Menu 3 Gạch"] span {
+  font-size: 11px;
+  letter-spacing: .08em;
+}
+#root > div > div > header button[title="Mở Google Chat"],
+#root > div > div > header button[title="Mở Google Forms"],
+#root > div > div > header button[title="Mở Google Docs"],
+#root > div > div > header button[title="Mở Google Tasks"] {
+  border: 1px solid #303036 !important;
+  background: #111113 !important;
+  color: #d4d4d8 !important;
+  box-shadow: none !important;
+}
+#root > div > div > header button[title="Mở Google Docs"] { background: #f4f4f5 !important; color: #09090b !important; }
+#root > div > div > header + div {
+  padding: 8px 16px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #27272a !important;
+  background: #09090b !important;
+}
+#root > div > div > header + div button {
+  min-height: 32px;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: #a1a1aa !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
+#root > div > div > header + div button[class*="bg-cyan-400"],
+#root > div > div > header + div button[class*="bg-cyan-950"] {
+  background: #18181b !important;
+  color: #fafafa !important;
+  border-color: #3f3f46 !important;
+}
+.xbo-hero {
+  border-color: #27272a !important;
+  background: linear-gradient(145deg, #141416 0%, #0c0c0e 68%, #111113 100%) !important;
+}
+.xbo-hero-glow { opacity: .16 !important; }
+.xbo-composer {
+  border-color: #303036 !important;
+  background: #111113 !important;
+}
+.xbo-composer:focus-within {
+  border-color: #52525b !important;
+  box-shadow: 0 0 0 3px rgba(161,161,170,.08) !important;
+}
+.xbo-starter-card {
+  border-color: #27272a !important;
+  background: #111113 !important;
+}
+.xbo-starter-card:hover {
+  background: #18181b !important;
+  border-color: #52525b !important;
+}
+@media (max-width: 640px) {
+  #root > div > div > header {
+    min-height: 56px;
+    padding: max(8px, env(safe-area-inset-top)) 12px 8px !important;
+    gap: 8px;
+  }
+  #root > div > div > header > div:last-child {
+    gap: 5px !important;
+  }
+  #root > div > div > header button[title="Mở Menu 3 Gạch"] {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 !important;
+  }
+  #root > div > div > header button[title="Mở Menu 3 Gạch"] span { display: none !important; }
+  #root > div > div > header button[title="Mở Google Chat"],
+  #root > div > div > header button[title="Mở Google Forms"],
+  #root > div > div > header button[title="Mở Google Docs"],
+  #root > div > div > header button[title="Mở Google Tasks"] { display: none !important; }
+  #root > div > div > header button[title="Kiểm tra trạng thái đồng bộ"] { display: none !important; }
+  #root > div > div > header button[title="Thông báo"] {
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid #303036 !important;
+    background: #111113 !important;
+  }
+  #root > div > div > header button[title="Tài khoản GitHub"] {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    padding: 0 10px !important;
+    border: 1px solid #e4e4e7 !important;
+  }
+  #root > div > div > header + div {
+    padding: 6px 10px !important;
+    gap: 6px;
+  }
+  #root > div > div > header + div button {
+    min-height: 34px;
+    padding: 0 10px !important;
+    font-size: 10px !important;
+  }
+  .xbo-bottom-nav { display: none !important; }
+  .xbo-hero { margin-bottom: 18px !important; padding: 20px !important; }
+  .xbo-composer { margin-top: 18px !important; }
+  .xbo-starter-card { padding: 12px !important; }
+  #root [role="dialog"] { max-width: 100vw; }
+}
