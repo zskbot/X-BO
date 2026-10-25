@@ -402,3 +402,53 @@ header,
     min-height: 60px !important;
   }
 }
+
+
+/* Vercel-inspired infrastructure drawer with nested navigation */
+.xbo-infra-summary {
+  border-bottom: 1px solid #27272a;
+  background: #09090b;
+}
+.xbo-infra-nav {
+  border-bottom: 1px solid #27272a;
+  background: #09090b;
+}
+.xbo-infra-nav button,
+.xbo-nested-nav button,
+.xbo-mode-switch {
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+}
+.xbo-infra-nav button[aria-current="page"] {
+  background: #18181b !important;
+  border-color: #3f3f46 !important;
+  color: #fafafa !important;
+}
+.xbo-nested-nav > div:last-child {
+  border-color: #27272a !important;
+}
+.xbo-nested-nav button[aria-pressed="true"] {
+  background: #27272a !important;
+  color: #fafafa !important;
+}
+.xbo-nav-drawer {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+  background: #09090b !important;
+}
+.xbo-nav-drawer > div:first-child {
+  border-bottom: 1px solid #27272a !important;
+}
+.xbo-nav-drawer .xbo-infra-nav button,
+.xbo-nav-drawer .xbo-nested-nav button {
+  min-height: 38px;
+  border-radius: 8px !important;
+}
+@media (max-width: 640px) {
+  .xbo-nav-drawer {
+    width: min(90vw, 380px) !important;
+    max-width: 380px !important;
+  }
+  .xbo-infra-nav { padding: 10px 12px !important; }
+  .xbo-infra-nav button { min-height: 42px !important; }
+  .xbo-nested-nav button { min-height: 38px !important; }
+}
