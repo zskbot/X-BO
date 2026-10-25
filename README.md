@@ -74,7 +74,7 @@ The workspace is evolving toward a prompt-first full-stack builder: start from a
 
 ```bash
 git clone https://github.com/zskbot/ask-ocodejs.git
-cd Ask OCode.js
+cd ask-ocodejs
 npm install
 ```
 
