@@ -87,7 +87,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
       />
 
       {/* Drawer Body */}
-      <aside className="relative w-full max-w-sm sm:max-w-md bg-black border-r-2 border-neutral-800 h-full flex flex-col shadow-2xl z-10 overflow-hidden text-white font-mono">
+      <aside className="xbo-nav-drawer relative w-[min(88vw,360px)] max-w-none sm:w-[360px] bg-black border-r border-neutral-800 h-full flex flex-col shadow-2xl z-10 overflow-hidden text-white font-mono">
         {/* Drawer Header */}
         <div className="p-4 sm:p-5 bg-black border-b-2 border-neutral-800 flex items-center justify-between">
           <div className="flex items-center space-x-3">

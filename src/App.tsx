@@ -254,7 +254,6 @@ export default function App() {
     setSessions(prev => [newSession, ...prev]);
   };
 
-  const [activeNavTab, setActiveNavTab] = useState<'chat' | 'diff' | 'logs' | 'rfc'>('chat');
   const [selectedModel, setSelectedModel] = useState<'zsk' | 'ohmaba' | 'openai' | 'gemini' | 'qwen' | 'claude'>('zsk');
 
   return (
@@ -273,8 +272,6 @@ export default function App() {
         isSyncing={isSyncing}
         onManualSync={handleManualSync}
         cleanHomeMode={cleanHomeMode}
-        activeNavTab={activeNavTab}
-        onChangeNavTab={setActiveNavTab}
         onToggleCleanHomeMode={() => setCleanHomeMode(!cleanHomeMode)}
       />
 
