@@ -153,7 +153,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         {isWelcome ? (
           <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-4 py-8 sm:px-8 sm:py-12">
-            <div className="mb-7 flex items-center gap-2 text-xs font-medium text-indigo-300">
+            <section className="xbo-hero relative mb-7 overflow-hidden rounded-2xl border p-5 sm:p-7"><div className="xbo-hero-glow" /><div className="relative z-10"><div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/[0.07] px-3 py-1.5 text-[11px] text-cyan-100"><span className="xbo-mini-logo">X</span> x-bo by <span className="text-sky-300">OCODE.js</span></div><div className="xbo-hero-robot" aria-hidden="true"><span /><span /></div><div className="mb-3 flex items-center gap-2 text-xs font-medium text-indigo-300">
               <Sparkles size={15} /> YOUR AI BUILDING WORKSPACE
             </div>
             <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.04em] text-white sm:text-5xl">
@@ -163,7 +163,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
               Mô tả sản phẩm bạn muốn xây dựng. x-bo giúp bạn bắt đầu từ yêu cầu, làm rõ cấu trúc và tiếp tục hoàn thiện cùng hệ sinh thái OCODE.js.
             </p>
 
-            <div className="mt-8 border border-white/10 bg-[#0c0f18] p-3 shadow-[0_18px_70px_rgba(31,41,90,0.12)] sm:p-4">
+            <div className="xbo-composer mt-8 border p-3 shadow-[0_18px_70px_rgba(31,41,90,0.12)] sm:p-4">
               <label htmlFor="xbo-prompt" className="sr-only">Mô tả ứng dụng muốn xây dựng</label>
               <textarea id="xbo-prompt" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
                 placeholder="Ask x-bo to build... Ví dụ: Tạo dashboard quản lý doanh thu dạng Dark Mode sử dụng OCODE.js."
@@ -186,12 +186,12 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                 <h2 className="text-xs font-semibold text-neutral-300">Start with a template</h2>
                 <span className="text-[10px] text-neutral-600">Chọn mẫu để điền prompt</span>
               </div>
-              <div className="grid gap-3 md:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                 {STARTER_PROMPTS.map(template => {
                   const Icon = template.icon;
                   return (
                     <button key={template.title} type="button" onClick={() => useTemplate(template.prompt)}
-                      className="group border border-white/[0.09] bg-white/[0.02] p-4 text-left transition hover:border-indigo-400/40 hover:bg-indigo-400/[0.04]">
+                      className="xbo-starter-card group border p-4 text-left transition">
                       <div className="mb-4 flex h-9 w-9 items-center justify-center border border-white/10 bg-white/[0.03] text-neutral-300 group-hover:border-indigo-400/30 group-hover:text-indigo-200">
                         <Icon size={17} />
                       </div>
@@ -242,7 +242,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
         </div>
       )}
 
-      {isWelcome && status && (
+      <nav className="xbo-bottom-nav mx-auto grid w-full max-w-4xl grid-cols-5 sm:hidden" aria-label="Điều hướng nhanh"><span className="selected"><MessageSquare size={17}/><small>Chat</small></span><span><LayoutDashboard size={17}/><small>Templates</small></span><span><Code2 size={17}/><small>Workspace</small></span><span><Sparkles size={17}/><small>Deploy</small></span><a href="https://github.com/zskbot/X-BO" target="_blank" rel="noreferrer"><Github size={17}/><small>GitHub</small></a></nav>\n      {isWelcome && status && (
         <div role="status" className={`border-t px-4 py-2 text-center text-[11px] ${status.type === 'error' ? 'border-rose-500/20 bg-rose-950/20 text-rose-200' : 'border-white/[0.06] bg-[#090b13] text-neutral-600'}`}>
           {status.text}
         </div>
