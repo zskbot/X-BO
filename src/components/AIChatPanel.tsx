@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles, WandSparkles } from 'lucide-react';
+import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
 
 const MODEL_OPTIONS = [
   { value: 'zsk', label: 'ZsK Free Agent' },
@@ -111,7 +111,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
       <header className="flex items-center justify-between gap-3 border-b border-white/10 bg-[#090b13]/95 px-4 py-3 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-indigo-400/30 bg-indigo-500/10 text-indigo-200">
-            <WandSparkles size={18} />
+            <Sparkles size={18} />
           </div>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2 text-sm font-semibold tracking-tight">
