@@ -1,16 +1,173 @@
 @import "tailwindcss";
-:root{color-scheme:dark}html,body,#root{min-height:100%}body{margin:0;background:#050812}
-.xbo-shell{background:radial-gradient(ellipse at 15% -10%,rgba(24,88,180,.18),transparent 42%),radial-gradient(ellipse at 100% 55%,rgba(79,43,180,.11),transparent 35%),#050812}
-.xbo-hero{border-color:rgba(73,143,255,.48);background:linear-gradient(125deg,rgba(11,24,49,.98),rgba(9,14,34,.94) 62%,rgba(29,22,69,.78));box-shadow:inset 0 1px rgba(255,255,255,.04),0 18px 60px rgba(0,0,0,.15)}
-.xbo-hero-glow{position:absolute;right:-35px;top:-65px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(24,153,255,.22),rgba(76,62,255,.1) 48%,transparent 72%);filter:blur(4px)}
-.xbo-mini-logo{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,#25d9ff,#7655ff);color:#061020;font-size:15px;font-weight:900;font-style:italic}
-.xbo-hero-robot{position:absolute;right:6%;top:23%;display:flex;align-items:center;justify-content:center;gap:18px;width:120px;height:86px;border:2px solid #5edbff;border-radius:34px 34px 27px 27px;background:linear-gradient(145deg,#172d5d,#080f25);box-shadow:0 0 24px rgba(42,177,255,.48),inset 0 0 18px rgba(80,100,255,.22);transform:rotate(-7deg)}
-.xbo-hero-robot span{width:12px;height:19px;border-radius:50%;background:#68e8ff;box-shadow:0 0 13px #27bfff}
-.xbo-composer{border-color:rgba(88,145,255,.4)!important;border-radius:18px;background:rgba(9,17,35,.96)!important;box-shadow:0 0 28px rgba(18,91,201,.08)}
-.xbo-starter-card{min-height:120px;border-color:rgba(99,145,255,.34)!important;border-radius:14px;background:linear-gradient(145deg,rgba(14,27,52,.9),rgba(7,13,28,.9))!important}
-.xbo-starter-card:hover{border-color:rgba(69,213,255,.85)!important;box-shadow:0 0 22px rgba(35,143,255,.12)}
-.xbo-bottom-nav{border:1px solid rgba(113,151,255,.16);border-radius:16px;background:rgba(9,15,31,.96);padding:10px 2px;gap:2px}
-.xbo-bottom-nav>*{display:flex;flex-direction:column;align-items:center;gap:4px;color:#94a6c8;font-size:10px;text-decoration:none}
-.xbo-bottom-nav .selected{color:#5edbff}.xbo-bottom-nav small{font-size:9px}
-@media(max-width:640px){.xbo-hero-robot{right:-8px;top:24%;opacity:.42;transform:scale(.75) rotate(-7deg)}.xbo-hero{border-radius:17px}.xbo-starter-card{min-height:108px;padding:12px}}
-@media(min-width:641px){.xbo-bottom-nav{display:none}}
+
+/* X-BO workspace — v0-inspired design system */
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #09090b;
+  color: #fafafa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --xbo-bg: #09090b;
+  --xbo-panel: #111113;
+  --xbo-panel-raised: #18181b;
+  --xbo-border: #27272a;
+  --xbo-muted: #a1a1aa;
+  --xbo-accent: #fafafa;
+  --xbo-focus: #a1a1aa;
+}
+html, body, #root { min-height: 100%; width: 100%; }
+html { background: var(--xbo-bg); }
+body { margin: 0; background: var(--xbo-bg); color: #fafafa; }
+button, input, textarea, select { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid #a1a1aa; outline-offset: 2px;
+}
+::selection { background: #3f3f46; color: #fff; }
+* { scrollbar-width: thin; scrollbar-color: #3f3f46 transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 999px; }
+
+/* Main shell: remove the old terminal-like hard edges and stacked rules */
+#root > div {
+  background: var(--xbo-bg) !important;
+  color: #fafafa;
+  letter-spacing: -0.012em;
+}
+header {
+  background: rgba(9, 9, 11, .94) !important;
+  border-color: var(--xbo-border) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(18px);
+}
+header button, header a,
+#root button {
+  transition: background-color .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+}
+#root button {
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  letter-spacing: normal;
+}
+#root button:hover { filter: brightness(1.08); }
+#root button:active { transform: translateY(1px); }
+#root input, #root textarea, #root select {
+  border-radius: 12px !important;
+  border-color: #303036 !important;
+  background-color: #111113 !important;
+  color: #fafafa !important;
+  box-shadow: none !important;
+}
+#root input::placeholder, #root textarea::placeholder { color: #71717a !important; }
+#root [class*="border-neutral-800"],
+#root [class*="border-neutral-700"],
+#root [class*="border-slate-800"],
+#root [class*="border-neutral-600"] {
+  border-color: var(--xbo-border) !important;
+}
+#root [class*="border-t-2"],
+#root [class*="border-b-2"],
+#root [class*="border-r-2"],
+#root [class*="border-l-2"] { border-width: 1px !important; }
+#root [class*="bg-black"] { background-color: var(--xbo-bg) !important; }
+#root [class*="bg-neutral-900"] { background-color: var(--xbo-panel-raised) !important; }
+#root [class*="text-cyan-300"],
+#root [class*="text-cyan-400"] { color: #d4d4d8 !important; }
+#root [class*="border-cyan-400"],
+#root [class*="border-cyan-300"],
+#root [class*="border-cyan-700"] { border-color: #52525b !important; }
+#root [class*="bg-cyan-400"] {
+  background: #fafafa !important;
+  color: #09090b !important;
+}
+#root [class*="text-black"] { color: #09090b !important; }
+#root [class*="shadow-"] { box-shadow: none !important; }
+
+/* Cleaner tab strip: low-profile, pill-like and horizontally scrollable */
+header + div {
+  background: var(--xbo-bg) !important;
+  border-color: var(--xbo-border) !important;
+}
+header + div button {
+  min-height: 36px;
+  border-width: 1px !important;
+  border-radius: 999px !important;
+  padding-inline: 14px !important;
+  font-size: 12px !important;
+}
+header + div button[class*="bg-cyan-400"] {
+  background: #fafafa !important;
+  color: #09090b !important;
+}
+
+/* Chat/build workspace surfaces */
+#root main { background: var(--xbo-bg) !important; }
+#root main section { background: var(--xbo-bg) !important; }
+#root [class*="rounded-none"] { border-radius: 12px !important; }
+#root [class*="font-mono"] { letter-spacing: -0.015em; }
+#root [class*="bg-neutral-950"],
+#root [class*="bg-[#0D1017]"] { background: #0c0c0f !important; }
+.xbo-shell {
+  min-height: 100%;
+  background: radial-gradient(ellipse at 50% -18%, rgba(113,113,122,.12), transparent 45%), #09090b !important;
+}
+.xbo-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #303036 !important;
+  border-radius: 22px !important;
+  background: linear-gradient(145deg, #151518, #0e0e11 70%, #15151a) !important;
+  box-shadow: none !important;
+}
+.xbo-hero-glow { opacity: .24; }
+.xbo-hero-robot {
+  border-color: #52525b !important;
+  background: #18181b !important;
+  box-shadow: none !important;
+}
+.xbo-hero-robot span { background: #e4e4e7 !important; box-shadow: none !important; }
+.xbo-mini-logo { background: #fafafa !important; color: #09090b !important; }
+.xbo-composer {
+  border: 1px solid #303036 !important;
+  border-radius: 18px !important;
+  background: #111113 !important;
+  box-shadow: none !important;
+}
+.xbo-starter-card {
+  border: 1px solid #27272a !important;
+  border-radius: 14px !important;
+  background: #111113 !important;
+}
+.xbo-starter-card:hover { border-color: #52525b !important; box-shadow: none !important; }
+.xbo-bottom-nav {
+  border: 1px solid #27272a !important;
+  border-radius: 18px !important;
+  background: rgba(17,17,19,.96) !important;
+  backdrop-filter: blur(18px);
+}
+.xbo-bottom-nav .selected { color: #fafafa !important; }
+
+/* Drawers and dialogs use a restrained surface instead of neon outlines */
+#root aside, #root [role="dialog"] {
+  background: #111113 !important;
+  border-color: #27272a !important;
+}
+#root pre, #root code { border-radius: 8px; }
+@media (max-width: 640px) {
+  #root > div { min-height: 100dvh; }
+  #root button { min-height: 36px; }
+  .xbo-hero { border-radius: 18px !important; }
+  .xbo-hero-robot { opacity: .22; }
+  .xbo-bottom-nav {
+    position: sticky;
+    bottom: 0;
+    z-index: 30;
+    padding: 10px 4px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
