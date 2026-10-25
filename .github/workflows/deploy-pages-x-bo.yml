@@ -1,4 +1,4 @@
-name: deploy-pages-x-bo
+name: deploy-ask-ocodejs-pages
 
 on:
   workflow_dispatch:
@@ -40,7 +40,7 @@ jobs:
         run: npm ci
 
       - name: Build Vite app for GitHub Pages
-        run: npm run build -- --base=/X-BO/
+        run: npm run build -- --base=/ask-ocodejs/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
