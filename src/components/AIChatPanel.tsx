@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Plus, Sparkles, WandSparkles } from 'lucide-react';
+import { ArrowUp, Bot, Check, ChevronDown, Code2, Github, LayoutDashboard, MessageSquare, PanelLeft, Sparkles, WandSparkles } from 'lucide-react';
 
 const MODEL_OPTIONS = [
   { value: 'zsk', label: 'ZsK Free Agent' },
