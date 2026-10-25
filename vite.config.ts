@@ -5,9 +5,9 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    // GitHub Pages publishes this project at /X-BO/, not at the domain root.
+    // GitHub Pages publishes this project at /ask-ocodejs/, not at the domain root.
     // VITE_BASE_PATH can be overridden for previews or other hosting providers.
-    base: process.env.VITE_BASE_PATH || '/X-BO/',
+    base: process.env.VITE_BASE_PATH || '/ask-ocodejs/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
