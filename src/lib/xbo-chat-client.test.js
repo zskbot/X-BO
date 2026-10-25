@@ -40,6 +40,13 @@ describe('requestChat', () => {
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 
+  it('rejects an empty model before calling the network', async () => {
+    const fetchImpl = vi.fn();
+    await expect(requestChat({ message: 'hello', model: '  ', fetchImpl }))
+      .rejects.toThrow('Hãy chọn một AI provider hợp lệ.');
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
   it('reports HTTP errors with bounded server details', async () => {
     await expect(requestChat({
       message: 'hello', model: 'zsk',
