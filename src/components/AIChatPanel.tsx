@@ -6,7 +6,7 @@ import { ArrowUp, Bot, Check, CheckCircle2, ChevronDown, Code2, Copy, Github, La
 import { createBuildPlan } from '../utils/buildPlanner.js';
 
 const MODEL_OPTIONS = [
-  { value: 'zsk', label: 'ZsK Free Agent' },
+  { value: 'zsk', label: 'Agents' },
   { value: 'ohmaba', label: 'Ohmaba Agent' },
   { value: 'openai', label: 'OpenAI' },
   { value: 'gemini', label: 'Google Gemini' },
@@ -50,7 +50,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'system',
-      content: 'Ask OCode.js sẵn sàng nhận yêu cầu. Chọn một model/agent bên trên; khả năng sử dụng phụ thuộc cấu hình backend.'
+      content: 'Ask OCode.js sẵn sàng nhận yêu cầu. Chọn Agents để bắt đầu; khả năng sử dụng phụ thuộc cấu hình backend.'
     }
   ]);
   const [input, setInput] = useState('');
@@ -156,21 +156,17 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
               </div>
               <section className="mb-4" aria-labelledby="models-agents-heading">
                 <div className="mb-2 flex items-center justify-between gap-3">
-                  <h2 id="models-agents-heading" className="text-xs font-semibold tracking-wide text-neutral-200">Models &amp; Agents</h2>
-                  <span className="text-[10px] text-neutral-500">Chọn provider</span>
+                  <h2 id="models-agents-heading" className="text-xs font-semibold tracking-wide text-neutral-200">Agents</h2>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {MODEL_OPTIONS.map(option => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => onSelectModel(option.value)}
-                      aria-pressed={selectedModel === option.value}
-                      className={`rounded-lg border px-3 py-2 text-xs transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-300 ${selectedModel === option.value ? 'border-indigo-300/50 bg-indigo-300/10 text-indigo-100' : 'border-white/10 bg-white/[0.025] text-neutral-400 hover:border-white/25 hover:text-neutral-100'}`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
+                  <button
+                    type="button"
+                    onClick={() => onSelectModel('zsk')}
+                    aria-pressed={selectedModel === 'zsk'}
+                    className={`rounded-lg border px-3 py-2 text-xs transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-300 ${selectedModel === 'zsk' ? 'border-indigo-300/50 bg-indigo-300/10 text-indigo-100' : 'border-white/10 bg-white/[0.025] text-neutral-400 hover:border-white/25 hover:text-neutral-100'}`}
+                  >
+                    Agents
+                  </button>
                 </div>
               </section>
               <div className="ocode-prompt-box">
@@ -180,10 +176,6 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                   className="ocode-prompt-input" />
                 <div className="ocode-prompt-toolbar">
                   <div className="flex min-w-0 flex-wrap items-center gap-2">
-                    <label className="sr-only" htmlFor="ocode-provider">AI provider</label>
-                    <select id="ocode-provider" value={selectedModel} onChange={event => onSelectModel(event.target.value)} className="max-w-[180px] rounded-lg border border-white/10 bg-[#141414] px-2.5 py-2 text-xs text-neutral-200" aria-label="Chọn AI provider">
-                      {MODEL_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
-                    </select>
                     <span className="ocode-prompt-hint hidden sm:inline">⌘/Ctrl + Enter để gửi</span>
                   </div>
                   <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending}
@@ -207,11 +199,11 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
           </main>
         ) : (
           <section aria-live="polite" aria-relevant="additions text" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-6 sm:px-8">
-            <div className="mb-1 flex items-center gap-2 text-xs text-neutral-500"><Sparkles size={14} className="text-neutral-300" /> Ask OCode.js · {MODEL_OPTIONS.find(option => option.value === selectedModel)?.label ?? selectedModel}</div>
+            <div className="mb-1 flex items-center gap-2 text-xs text-neutral-500"><Sparkles size={14} className="text-neutral-300" /> Ask OCode.js · Agents</div>
             {messages.filter(message => message.role !== 'system').map((message, index) => (
               <article key={`${message.role}-${index}`} className={`max-w-[92%] border p-4 sm:max-w-[85%] ${message.role === 'user' ? 'ml-auto border-indigo-400/20 bg-indigo-400/[0.08]' : 'border-white/10 bg-white/[0.025]'}`}>
                 <div className="mb-2 flex items-center justify-between gap-3 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
-                  <span className="flex items-center gap-2">{message.role === 'user' ? 'Bạn' : <><Bot size={13} className="text-indigo-300" /> x-bo agent</>}</span>
+                  <span className="flex items-center gap-2">{message.role === 'user' ? 'Bạn' : <><Bot size={13} className="text-indigo-300" /> Agents</>}</span>
                   {message.role === 'assistant' && <button type="button" onClick={() => void handleCopyMessage(message.content, index)} aria-label="Sao chép phản hồi" className="inline-flex items-center gap-1.5 rounded-md border border-white/10 px-2 py-1 text-[10px] normal-case tracking-normal text-neutral-400 transition hover:border-cyan-300/40 hover:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300">{copiedMessage === index ? <Check size={12} /> : <Copy size={12} />} {copiedMessage === index ? "Đã sao chép" : "Sao chép"}</button>}
                 </div>
                 <div className="text-sm leading-6 text-neutral-200">{message.role === 'assistant' && message.workspaceMode === 'plan' ? <PlanChecklist content={message.content} /> : message.role === 'assistant' ? <CodeProposalView content={message.content} /> : <div className="whitespace-pre-wrap break-words">{message.content}</div>}</div>
