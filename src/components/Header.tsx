@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Menu, Archive, Share2, Github, ChevronDown,
+  Menu, Archive, Github, ChevronDown,
   ListTodo, FileText, MessageCircle, FileSpreadsheet
 } from 'lucide-react';
 import { UserProfile, PushNotification } from '../types/shell';
@@ -22,6 +22,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
+  user,
   notifications,
   onOpenAuth,
   onOpenNotifications,
@@ -42,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={onToggleMainMenu}
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-zinc-300 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-zinc-300 transition hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
             title="Mở menu điều hướng"
             aria-label="Mở menu điều hướng"
           >
@@ -92,28 +93,17 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Archive className="h-4 w-4" />
           </button>
-          <button
-            type="button"
-            onClick={onOpenNotifications}
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-white/10 hover:text-white"
-            title="Thông báo"
-            aria-label="Thông báo"
-          >
-            <Share2 className="h-4 w-4" />
-            {unreadCount > 0 && <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-white ring-2 ring-black" />}
-          </button>
-
           <span aria-hidden="true" className="mx-1 hidden h-5 w-px bg-white/10 sm:block" />
           <button
             type="button"
             onClick={onOpenAuth}
-            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-white/15 px-2.5 text-xs font-medium text-zinc-200 transition hover:border-white/30 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 sm:px-3"
+            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/[0.04] px-3 text-xs font-medium text-zinc-100 transition hover:border-white/40 hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 sm:px-3"
             title="Kết nối hoặc quản lý tài khoản GitHub"
             aria-label="Kết nối hoặc quản lý tài khoản GitHub"
           >
             <Github className="h-4 w-4" />
-            <span className="hidden sm:inline">GitHub</span>
-            <ChevronDown className="hidden h-3.5 w-3.5 text-zinc-500 sm:block" />
+            <span>Sign in</span>
+            <ChevronDown className="h-3.5 w-3.5 text-zinc-500" />
           </button>
         </div>
       </header>
