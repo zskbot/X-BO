@@ -50,7 +50,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'system',
-      content: 'Ask OCode.js sẵn sàng nhận yêu cầu. Chọn Agents để bắt đầu; khả năng sử dụng phụ thuộc cấu hình backend.'
+      content: 'Ask OCode.js sẵn sàng nhận yêu cầu. Mô tả ứng dụng bạn muốn xây dựng để bắt đầu.'
     }
   ]);
   const [input, setInput] = useState('');
@@ -152,23 +152,8 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                   <Sparkles size={14} aria-hidden="true" /> Open-source AI App Builder
                 </span>
                 <h1 className="ocode-home-title">Build something remarkable.</h1>
-                <p className="max-w-xl text-sm leading-6 text-neutral-400">Describe your idea in plain language. Start with a prompt and refine the result with Agents.</p>
+                <p className="max-w-xl text-sm leading-6 text-neutral-400">Describe your idea in plain language. Start with a prompt and refine your app with AI.</p>
               </div>
-              <section className="mb-4" aria-labelledby="models-agents-heading">
-                <div className="mb-2 flex items-center justify-between gap-3">
-                  <h2 id="models-agents-heading" className="text-xs font-semibold tracking-wide text-neutral-200">Agents</h2>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => onSelectModel('zsk')}
-                    aria-pressed={selectedModel === 'zsk'}
-                    className={`rounded-lg border px-3 py-2 text-xs transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-300 ${selectedModel === 'zsk' ? 'border-indigo-300/50 bg-indigo-300/10 text-indigo-100' : 'border-white/10 bg-white/[0.025] text-neutral-400 hover:border-white/25 hover:text-neutral-100'}`}
-                  >
-                    Agents
-                  </button>
-                </div>
-              </section>
               <div className="ocode-prompt-box">
                 <label htmlFor="xbo-prompt" className="sr-only">Mô tả ứng dụng muốn xây dựng</label>
                 <textarea id="xbo-prompt" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
@@ -194,7 +179,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                   </button>;
                 })}
               </div>
-              <p className="mt-3 text-center text-[11px] text-neutral-600">Agents availability depends on backend configuration. The prompt planner does not generate app files by itself.</p>
+              <p className="mt-3 text-center text-[11px] text-neutral-600">AI responses depend on backend configuration. The prompt planner does not generate app files by itself.</p>
             </div>
           </main>
         ) : (
