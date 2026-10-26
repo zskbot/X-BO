@@ -115,7 +115,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     const file = event.target.files?.[0];
     event.target.value = '';
     if (!file) return;
-    const allowed = /\.(txt|md|mdx|json|csv|tsv|js|jsx|ts|tsx|html|css|scss|xml|yaml|yml|toml|ini|log|py|go|rs|java|sql|sh|env|diff|patch)$/i;
+    const allowed = /\.(txt|md|mdx|json|csv|tsv|js|jsx|ts|tsx|html|css|scss|xml|yaml|yml|toml|ini|log|py|go|rs|java|sql|sh|diff|patch)$/i;
     if (!allowed.test(file.name)) {
       setStatus({ type: 'error', text: 'Tệp chưa được hỗ trợ. Hãy chọn tệp văn bản, Markdown, CSV, JSON hoặc mã nguồn.' });
       return;
@@ -189,7 +189,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                   className="ocode-prompt-input" />
                 <div className="ocode-prompt-toolbar">
                   <div className="flex min-w-0 flex-wrap items-center gap-2">
-                    <label className="inline-flex cursor-pointer items-center gap-1.5 border border-white/10 px-3 py-2 text-xs text-neutral-300 transition hover:border-indigo-300/40 hover:text-white" title="Đính kèm tệp văn bản cho agent"><Paperclip size={14} /> <span>Úp file</span><input type="file" className="sr-only" accept=".txt,.md,.mdx,.json,.csv,.tsv,.js,.jsx,.ts,.tsx,.html,.css,.scss,.xml,.yaml,.yml,.toml,.ini,.log,.py,.go,.rs,.java,.sql,.sh,.env,.diff,.patch" onChange={handleFileChange} /></label>
+                    <label className="inline-flex cursor-pointer items-center gap-1.5 border border-white/10 px-3 py-2 text-xs text-neutral-300 transition hover:border-indigo-300/40 hover:text-white" title="Đính kèm tệp văn bản cho agent"><Paperclip size={14} /> <span>Úp file</span><input type="file" className="sr-only" accept=".txt,.md,.mdx,.json,.csv,.tsv,.js,.jsx,.ts,.tsx,.html,.css,.scss,.xml,.yaml,.yml,.toml,.ini,.log,.py,.go,.rs,.java,.sql,.sh,.diff,.patch" onChange={handleFileChange} /></label>
                     {attachedFile && <span className="max-w-[150px] truncate text-xs text-indigo-200" title={attachedFile.name}>{attachedFile.name}<button type="button" onClick={() => setAttachedFile(null)} className="ml-1 inline-flex align-middle" aria-label="Bỏ tệp đính kèm"><X size={12} /></button></span>}
                     <span className="ocode-prompt-hint hidden sm:inline">⌘/Ctrl + Enter để gửi</span>
                   </div>
@@ -234,7 +234,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
           {status && <div role={status.type === 'error' ? 'alert' : 'status'} className={`mx-auto mb-3 max-w-4xl border px-3 py-2 text-xs ${status.type === 'error' ? 'border-rose-500/30 bg-rose-950/30 text-rose-200' : 'border-white/10 bg-white/[0.03] text-neutral-400'}`}>{status.text}</div>}
           {attachedFile && <div className="mx-auto mb-2 flex max-w-4xl items-center gap-2 text-xs text-indigo-200"><Paperclip size={14} /><span className="truncate">{attachedFile.name}</span><button type="button" onClick={() => setAttachedFile(null)} aria-label="Bỏ tệp đính kèm"><X size={13} /></button></div>}
           <div className="mx-auto flex max-w-4xl items-end gap-2 border border-white/10 bg-[#0c0f18] p-2 focus-within:border-indigo-400/40">
-            <label className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center border border-white/10 px-3 text-neutral-300 hover:border-indigo-300/40" title="Đính kèm tệp cho agent" aria-label="Úp file cho agent"><Paperclip size={17} /><input type="file" className="sr-only" accept=".txt,.md,.mdx,.json,.csv,.tsv,.js,.jsx,.ts,.tsx,.html,.css,.scss,.xml,.yaml,.yml,.toml,.ini,.log,.py,.go,.rs,.java,.sql,.sh,.env,.diff,.patch" onChange={handleFileChange} /></label>
+            <label className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center border border-white/10 px-3 text-neutral-300 hover:border-indigo-300/40" title="Đính kèm tệp cho agent" aria-label="Úp file cho agent"><Paperclip size={17} /><input type="file" className="sr-only" accept=".txt,.md,.mdx,.json,.csv,.tsv,.js,.jsx,.ts,.tsx,.html,.css,.scss,.xml,.yaml,.yml,.toml,.ini,.log,.py,.go,.rs,.java,.sql,.sh,.diff,.patch" onChange={handleFileChange} /></label>
             <textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
               placeholder="Tiếp tục yêu cầu hoặc tinh chỉnh ứng dụng..." aria-label="Tin nhắn cho Agents" maxLength={8000}
               className="max-h-40 min-h-12 flex-1 resize-y bg-transparent px-2 py-2 text-sm text-white outline-none placeholder:text-neutral-600" />
