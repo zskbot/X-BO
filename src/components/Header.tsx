@@ -23,7 +23,6 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   user,
-  notifications,
   onOpenAuth,
   onOpenNotifications,
   onOpenGoogleTasks,
@@ -34,7 +33,6 @@ export const Header: React.FC<HeaderProps> = ({
   isSyncing,
   onManualSync,
 }) => {
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <div className="sticky top-0 z-30 select-none border-b border-white/10 bg-black/95 font-sans backdrop-blur-xl">
