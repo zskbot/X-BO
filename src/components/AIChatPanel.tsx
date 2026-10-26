@@ -50,7 +50,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'system',
-      content: 'x-bo sẵn sàng nhận yêu cầu. Chọn provider đã được cấu hình để bắt đầu.'
+      content: 'Ask OCode.js sẵn sàng nhận yêu cầu. Chọn một model/agent bên trên; khả năng sử dụng phụ thuộc cấu hình backend.'
     }
   ]);
   const [input, setInput] = useState('');
@@ -154,6 +154,25 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                 <h1 className="ocode-home-title">Build something remarkable.</h1>
                 <p className="max-w-xl text-sm leading-6 text-neutral-400">Describe your idea in plain language. Start with a prompt, choose a configured provider, and refine the result with your agent.</p>
               </div>
+              <section className="mb-4" aria-labelledby="models-agents-heading">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <h2 id="models-agents-heading" className="text-xs font-semibold tracking-wide text-neutral-200">Models &amp; Agents</h2>
+                  <span className="text-[10px] text-neutral-500">Chọn provider</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {MODEL_OPTIONS.map(option => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => onSelectModel(option.value)}
+                      aria-pressed={selectedModel === option.value}
+                      className={`rounded-lg border px-3 py-2 text-xs transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-300 ${selectedModel === option.value ? 'border-indigo-300/50 bg-indigo-300/10 text-indigo-100' : 'border-white/10 bg-white/[0.025] text-neutral-400 hover:border-white/25 hover:text-neutral-100'}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </section>
               <div className="ocode-prompt-box">
                 <label htmlFor="xbo-prompt" className="sr-only">Mô tả ứng dụng muốn xây dựng</label>
                 <textarea id="xbo-prompt" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
