@@ -115,7 +115,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     const file = event.target.files?.[0];
     event.target.value = '';
     if (!file) return;
-    const allowed = /\\.(txt|md|mdx|json|csv|tsv|js|jsx|ts|tsx|html|css|scss|xml|yaml|yml|toml|ini|log|py|go|rs|java|sql|sh|env|diff|patch)$/i;
+    const allowed = /\.(txt|md|mdx|json|csv|tsv|js|jsx|ts|tsx|html|css|scss|xml|yaml|yml|toml|ini|log|py|go|rs|java|sql|sh|env|diff|patch)$/i;
     if (!allowed.test(file.name)) {
       setStatus({ type: 'error', text: 'Tệp chưa được hỗ trợ. Hãy chọn tệp văn bản, Markdown, CSV, JSON hoặc mã nguồn.' });
       return;
