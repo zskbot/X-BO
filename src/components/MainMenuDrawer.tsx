@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   X,
+  ShieldCheck,
   Sparkles,
   Folder,
   FileText,
@@ -105,6 +106,17 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           >
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        <div className="border-b border-white/10 px-4 py-4">
+          <button type="button" onClick={() => { onOpenAuth(); onClose(); }} className="w-full rounded-xl border border-white/15 bg-white/[0.04] p-3 text-left transition hover:border-white/30 hover:bg-white/[0.07]">
+            <span className="flex items-center gap-2 text-sm font-medium text-white"><ShieldCheck className="h-4 w-4" /> Sign in to Ask OCode.js</span>
+            <span className="mt-1 block text-xs leading-5 text-zinc-400">Save projects and manage provider settings. Server-side authentication must be configured before sign-in is active.</span>
+          </button>
+          <div className="mt-3 flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-sm font-semibold">{user.username.slice(0, 1).toUpperCase()}</div>
+            <div className="min-w-0"><div className="truncate text-sm text-white">{user.username}</div><div className="truncate text-xs text-zinc-500">{user.email || user.role || 'Guest profile'} · {user.authProvider}</div></div>
+          </div>
         </div>
 
         <div className="xbo-infra-summary flex items-center justify-between gap-3 px-4 py-3">
