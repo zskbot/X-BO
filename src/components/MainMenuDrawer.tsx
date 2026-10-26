@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   X,
-  ShieldCheck,
   Sparkles,
   Folder,
   FileText,
@@ -13,7 +12,6 @@ import {
   RefreshCw,
   Terminal,
   FileCode,
-  ShieldCheck,
   Zap,
   Sliders,
   Maximize2,
@@ -24,7 +22,8 @@ import {
   Database,
   Trash2,
   CheckCircle2,
-  BarChart2
+  BarChart2,
+  ShieldCheck
 } from 'lucide-react';
 import { ProjectFile, SavedSession, WatsonMetrics, UserProfile } from '../types/shell';
 import { getConfidenceTheme } from '../utils/syntaxHighlighting';
@@ -77,6 +76,16 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   const [activeTab, setActiveTab] = useState<'utilities' | 'files' | 'sessions' | 'system'>('utilities');
   const [activeUtilityTab, setActiveUtilityTab] = useState<'actions' | 'reports' | 'terminal'>('actions');
   const theme = getConfidenceTheme(metrics.aiConfidence);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -92,7 +101,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
         {/* Drawer Header */}
         <div className="p-4 sm:p-5 bg-black border-b-2 border-neutral-800 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <img src="https://raw.githubusercontent.com/zskbot/X-BO/main/assets/app-icon-light-mode.png" alt="OCode.js" className="h-10 w-10 rounded-xl object-contain" width="40" height="40" />
+            <img src="https://raw.githubusercontent.com/zskbot/ask-ocodejs/main/assets/app-icon-light-mode.png" alt="OCode.js" className="h-10 w-10 rounded-xl object-contain" width="40" height="40" />
             <div>
               <h2 className="text-base font-semibold tracking-tight text-white">OCode.js</h2>
               <p className="text-xs text-neutral-500 font-sans">Ask OCode.js</p>

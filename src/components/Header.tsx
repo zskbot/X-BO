@@ -99,8 +99,12 @@ export const Header: React.FC<HeaderProps> = ({
             title="Kết nối hoặc quản lý tài khoản GitHub"
             aria-label="Kết nối hoặc quản lý tài khoản GitHub"
           >
-            <Github className="h-4 w-4" />
-            <span>Sign in</span>
+            {user.authProvider !== 'guest' && user.avatarUrl ? (
+              <img src={user.avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover" />
+            ) : (
+              <Github className="h-4 w-4" />
+            )}
+            <span>{user.authProvider === 'guest' ? 'Sign in' : user.username}</span>
             <ChevronDown className="h-3.5 w-3.5 text-zinc-500" />
           </button>
         </div>

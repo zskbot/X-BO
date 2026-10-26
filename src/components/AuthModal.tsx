@@ -12,7 +12,6 @@ interface AuthModalProps {
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, user }) => {
   const [email, setEmail] = useState('');
   const [notice, setNotice] = useState('');
-  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -44,7 +43,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, user }) =
         <button type="button" onClick={onClose} aria-label="Close sign in dialog" className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"><X size={18}/></button>
         <div className="px-6 pb-6 pt-8 sm:px-8">
           <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05]"><ShieldCheck size={22}/></div>
-          <h2 id="auth-modal-title" className="text-center text-xl font-semibold tracking-tight">Welcome to OCode.js</h2>
+          <h2 id="auth-modal-title" className="text-center text-xl font-semibold tracking-tight">Welcome to Ask OCode.js</h2>
           <p className="mx-auto mt-2 max-w-xs text-center text-sm leading-5 text-zinc-400">Sign in to manage your projects and provider settings.</p>
           <div className="mt-6 space-y-2.5">
             <button type="button" onClick={() => unavailable('GitHub OAuth')} className="flex h-11 w-full items-center justify-center gap-3 rounded-xl border border-white/15 bg-white/[0.04] text-sm font-medium transition hover:border-white/30 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"><Github size={18}/> Continue with GitHub</button>
