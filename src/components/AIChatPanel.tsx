@@ -57,7 +57,6 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
   const [workspaceMode, setWorkspaceMode] = useState<'chat' | 'plan'>('chat');
   const [status, setStatus] = useState<{ type: 'info' | 'error'; text: string } | null>(null);
   const [isSending, setIsSending] = useState(false);
-  const [showProviderMenu, setShowProviderMenu] = useState(false);
   const [copiedMessage, setCopiedMessage] = useState<number | null>(null);
   const isWelcome = messages.length <= 1;
   const localBuildPlan = createBuildPlan(input);
@@ -107,7 +106,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     }
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       void handleSend();
     }
@@ -148,38 +147,48 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
         {isWelcome ? (
           <main className="ocode-home mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-4 py-8 sm:px-8">
             <div className="ocode-home-content mx-auto w-full">
-              <a className="ocode-plan-pill" href="https://github.com/zskbot/X-BO" target="_blank" rel="noreferrer" aria-label="OCode.js on GitHub">
-                <img src="https://raw.githubusercontent.com/zskbot/X-BO/main/assets/app-icon-light-mode.png" alt="" width="22" height="22" />
-                <span>Build with <strong>OCode.js</strong></span>
-                <Code2 size={15} aria-hidden="true" />
-              </a>
-              <h1 className="ocode-home-title">What do you want to create?</h1>
+              <div className="mb-7 flex flex-col items-center gap-3 text-center">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5 text-xs text-neutral-300">
+                  <Sparkles size={14} aria-hidden="true" /> Open-source AI App Builder
+                </span>
+                <h1 className="ocode-home-title">Build something remarkable.</h1>
+                <p className="max-w-xl text-sm leading-6 text-neutral-400">Describe your idea in plain language. Start with a prompt, choose a configured provider, and refine the result with your agent.</p>
+              </div>
               <div className="ocode-prompt-box">
                 <label htmlFor="xbo-prompt" className="sr-only">Mô tả ứng dụng muốn xây dựng</label>
                 <textarea id="xbo-prompt" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
                   placeholder="Ask OCode.js to build..."
                   className="ocode-prompt-input" />
                 <div className="ocode-prompt-toolbar">
-                  <span className="ocode-prompt-hint">Prompt-first · OCode.js workflow</span>
+                  <div className="flex min-w-0 flex-wrap items-center gap-2">
+                    <label className="sr-only" htmlFor="ocode-provider">AI provider</label>
+                    <select id="ocode-provider" value={selectedModel} onChange={event => onSelectModel(event.target.value)} className="max-w-[180px] rounded-lg border border-white/10 bg-[#141414] px-2.5 py-2 text-xs text-neutral-200" aria-label="Chọn AI provider">
+                      {MODEL_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                    </select>
+                    <span className="ocode-prompt-hint hidden sm:inline">⌘/Ctrl + Enter để gửi</span>
+                  </div>
                   <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending}
                     className="ocode-send-button" aria-label={isSending ? 'Đang gửi yêu cầu' : 'Gửi yêu cầu'}>
                     {isSending ? 'Đang gửi...' : <><span className="hidden sm:inline">Bắt đầu</span><ArrowUp size={18} /></>}
                   </button>
                 </div>
               </div>
-              <button type="button" onClick={() => useTemplate(STARTER_PROMPTS[0].prompt)} className="ocode-template-card">
-                <span className="ocode-template-icon"><Sparkles size={21} /></span>
-                <span className="ocode-template-copy">
-                  <strong>Start with a template</strong>
-                  <small>Build faster with a ready-to-customize starting point.</small>
-                </span>
-                <span className="ocode-template-arrow" aria-hidden="true">›</span>
-              </button>
+              {status && <div role={status.type === 'error' ? 'alert' : 'status'} className={`mt-3 rounded-lg border px-3 py-2 text-xs ${status.type === 'error' ? 'border-rose-500/30 bg-rose-950/30 text-rose-200' : 'border-white/10 bg-white/[0.03] text-neutral-400'}`}>{status.text}</div>}
+              <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3" aria-label="Prompt mẫu">
+                {STARTER_PROMPTS.map(template => {
+                  const TemplateIcon = template.icon;
+                  return <button key={template.title} type="button" onClick={() => useTemplate(template.prompt)} className="group flex min-h-[112px] flex-col items-start gap-3 rounded-xl border border-white/10 bg-white/[0.025] p-4 text-left transition hover:border-white/25 hover:bg-white/[0.05]">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-neutral-200"><TemplateIcon size={18} /></span>
+                    <span><strong className="block text-sm font-medium text-neutral-100">{template.title}</strong><small className="mt-1 block text-xs leading-5 text-neutral-500">{template.description}</small></span>
+                  </button>;
+                })}
+              </div>
+              <p className="mt-3 text-center text-[11px] text-neutral-600">Provider availability depends on backend configuration. No app files are generated by the prompt planner alone.</p>
             </div>
           </main>
         ) : (
           <section aria-live="polite" aria-relevant="additions text" className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-6 sm:px-8">
-            <div className="mb-1 flex items-center gap-2 text-xs text-neutral-500"><Sparkles size={14} className="text-indigo-300" /> x-bo conversation</div>
+            <div className="mb-1 flex items-center gap-2 text-xs text-neutral-500"><Sparkles size={14} className="text-neutral-300" /> Ask OCode.js · {MODEL_OPTIONS.find(option => option.value === selectedModel)?.label ?? selectedModel}</div>
             {messages.filter(message => message.role !== 'system').map((message, index) => (
               <article key={`${message.role}-${index}`} className={`max-w-[92%] border p-4 sm:max-w-[85%] ${message.role === 'user' ? 'ml-auto border-indigo-400/20 bg-indigo-400/[0.08]' : 'border-white/10 bg-white/[0.025]'}`}>
                 <div className="mb-2 flex items-center justify-between gap-3 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
@@ -206,11 +215,11 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
               <ArrowUp size={16} /><span className="hidden sm:inline">{isSending ? 'Đang gửi' : 'Gửi'}</span>
             </button>
           </div>
-          <p className="mx-auto mt-2 max-w-4xl text-[10px] text-neutral-600">Enter để gửi · Shift + Enter để xuống dòng</p>
+          <p className="mx-auto mt-2 max-w-4xl text-[10px] text-neutral-600">Ctrl/Cmd + Enter để gửi · Shift + Enter để xuống dòng</p>
         </div>
       )}
 
-      <nav className="xbo-bottom-nav mx-auto grid w-full max-w-4xl grid-cols-5 sm:hidden" aria-label="Điều hướng nhanh"><span className="selected"><MessageSquare size={17}/><small>Chat</small></span><span><LayoutDashboard size={17}/><small>Templates</small></span><span><Code2 size={17}/><small>Workspace</small></span><span><Sparkles size={17}/><small>Deploy</small></span><a href="https://github.com/zskbot/X-BO" target="_blank" rel="noreferrer"><Github size={17}/><small>GitHub</small></a></nav>
+      <nav className="xbo-bottom-nav mx-auto grid w-full max-w-4xl grid-cols-5 sm:hidden" aria-label="Điều hướng nhanh"><span className="selected"><MessageSquare size={17}/><small>Chat</small></span><span><LayoutDashboard size={17}/><small>Templates</small></span><span><Code2 size={17}/><small>Workspace</small></span><span><Sparkles size={17}/><small>Deploy</small></span><a href="https://github.com/zskbot/ask-ocodejs" target="_blank" rel="noreferrer"><Github size={17}/><small>GitHub</small></a></nav>
     </div>
   );
 };
