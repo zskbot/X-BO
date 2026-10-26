@@ -591,3 +591,38 @@ html, body, #root, #root > div { background: #000 !important; }
   .ocode-send-button { min-width: 42px; padding: 0 12px !important; }
   .ocode-template-card { margin-top: 20px; padding: 16px !important; }
 }
+
+
+/* Compact Ask OCode.js home and controls: preserve space on mobile. */
+.ocode-home { padding: 16px 16px max(18px, env(safe-area-inset-bottom)) !important; }
+.ocode-home-content { max-width: 720px !important; }
+.ocode-home-content > div:first-child { margin-bottom: 14px !important; gap: 8px !important; }
+.ocode-home-title { margin-bottom: 8px !important; font-size: clamp(24px, 4vw, 34px) !important; }
+.ocode-home-content > div:first-child > span { padding: 5px 9px !important; font-size: 11px !important; }
+.ocode-home-content > div:first-child > p { font-size: 12px !important; line-height: 1.45 !important; }
+.ocode-prompt-box { padding: 11px 12px 9px !important; border-radius: 16px !important; }
+#root textarea.ocode-prompt-input { min-height: 68px !important; max-height: 28dvh !important; padding-bottom: 8px !important; font-size: 14px !important; }
+.ocode-prompt-toolbar { min-height: 34px !important; gap: 8px !important; padding-top: 8px !important; }
+.ocode-prompt-toolbar label { min-height: 30px !important; padding: 0 9px !important; font-size: 11px !important; }
+.ocode-prompt-toolbar label svg { width: 13px; height: 13px; }
+.ocode-send-button { min-height: 32px !important; border-radius: 8px !important; padding: 0 10px !important; font-size: 12px !important; }
+.ocode-home-content > .mt-5 { margin-top: 12px !important; }
+.ocode-home-content > .mt-5 button { min-height: 82px !important; gap: 8px !important; padding: 10px !important; border-radius: 12px !important; }
+.ocode-home-content > .mt-5 button > span:first-child { width: 28px !important; height: 28px !important; }
+.ocode-home-content > .mt-5 button strong { font-size: 12px !important; }
+.ocode-home-content > .mt-5 button small { margin-top: 3px !important; font-size: 10px !important; line-height: 1.35 !important; }
+.ocode-home-content > p:last-child { margin-top: 8px !important; font-size: 10px !important; }
+@media (max-width: 640px) {
+  .ocode-home { padding: 12px 12px max(14px, env(safe-area-inset-bottom)) !important; }
+  .ocode-home-title { font-size: 25px !important; line-height: 1.15 !important; }
+  .ocode-home-content > div:first-child { margin-bottom: 12px !important; }
+  .ocode-prompt-box { padding: 10px !important; border-radius: 14px !important; }
+  #root textarea.ocode-prompt-input { min-height: 60px !important; font-size: 14px !important; }
+  .ocode-prompt-toolbar { align-items: center !important; }
+  .ocode-prompt-toolbar > div:first-child { gap: 6px !important; }
+  .ocode-prompt-hint { display: none !important; }
+  .ocode-home-content > .mt-5 { grid-template-columns: 1fr !important; gap: 7px !important; }
+  .ocode-home-content > .mt-5 button { min-height: 56px !important; flex-direction: row !important; align-items: center !important; padding: 9px 11px !important; }
+  .ocode-home-content > .mt-5 button > span:first-child { width: 30px !important; height: 30px !important; flex: 0 0 30px !important; }
+  .ocode-home-content > .mt-5 button > span:last-child { min-width: 0; }
+}
