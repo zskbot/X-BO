@@ -1,8 +1,8 @@
-# x-bo by OCODE.js — Product & Builder Workspace
+# Ask OCode.js — Product & Builder Workspace
 
 ## Product overview
 
-**x-bo by OCODE.js** is the intended AI-assisted full-stack building workspace for turning a prompt, visual reference, or existing design into a web application scaffold and an iterative development workflow.
+**Ask OCode.js** is the intended AI-assisted full-stack building workspace for turning a prompt, visual reference, or existing design into a web application scaffold and an iterative development workflow.
 
 This document defines the product direction and interface architecture. It does **not** claim that every capability below is already implemented. Feature status must be verified in code and CI before being advertised as available.
 
@@ -64,7 +64,7 @@ Deployment & Sync Layer
 
 ## 2. Suggested user workflow
 
-1. **Start:** choose a template or describe the application in the “Ask x-bo to build…” prompt.
+1. **Start:** choose a template or describe the application in the “Ask OCode.js to build…” prompt.
 2. **Plan:** review the proposed files, tasks, dependencies, integration requirements and risks.
 3. **Generate:** create a patch in a project workspace; preserve existing files and show the diff.
 4. **Preview:** run build/tests and open an isolated preview; report failures instead of hiding them.
@@ -76,7 +76,7 @@ Deployment & Sync Layer
 
 ### Main workspace
 
-- **Header:** x-bo branding, current project, provider/model selector, connection state, GitHub and release actions.
+- **Header:** Ask OCode.js branding, current project, provider/model selector, connection state, GitHub and release actions.
 - **Left rail:** project files, templates, tasks and recent sessions.
 - **Center stage:** prompt-first welcome state; after generation, real preview with Preview / Code / Diff / Logs tabs.
 - **Composer:** “Ask x-bo to build…” text input, submit action and template suggestions. Attachments should only be enabled when upload and backend processing are implemented.
@@ -139,3 +139,14 @@ The existing X-BO repository contains a React/Vite UI and an API-backed text cha
 5. GitHub sync creates a branch and PR without secrets.
 6. Deployment actions remain disabled until the target integration is configured and validated.
 7. Mobile viewport, keyboard access, error states and automated checks pass.
+
+
+## Verified UI behavior and implementation boundaries
+
+The prompt-first screen provides starter prompt cards, a provider selector populated from the frontend's configured option list, and a send action. The selector is a request parameter; it does not guarantee that a provider is configured or reachable. Backend credentials must remain server-side.
+
+- The prompt composer sends on **Ctrl/Cmd + Enter**; **Shift + Enter** inserts a newline.
+- The client preserves the prompt after a request failure and displays an actionable error state.
+- Client tests cover empty prompt/provider validation, successful JSON responses, HTTP errors, malformed JSON, and empty response payloads.
+- The browser-side draft planner is a planning aid only. It does not create or modify project files.
+- Do not claim that templates generate complete applications, that a live preview exists, or that GitHub write-back/deployment works unless those paths have dedicated implementation and passing integration checks.

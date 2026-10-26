@@ -38,7 +38,7 @@ Ask OCode.js is an AI-agent web application built around a simple idea: make it 
 
 ## Product direction: Ask OCode.js
 
-The workspace is evolving toward a prompt-first full-stack builder: start from a natural-language request or template, review planned work, inspect generated files and diffs, validate a real preview, and sync through a GitHub branch/PR workflow. The current UI includes a redesigned prompt-first chat entry and starter prompts. Visual asset processing, generated-code preview/editor, GitHub write-back, and OCode.js deployment must not be considered available until their integrations are implemented and tested.
+The workspace is evolving toward a prompt-first full-stack builder. The current frontend provides a prompt-first chat entry, starter prompts, provider selection, a local draft plan, and response/error states. A successful chat response is not proof that application files were generated, previewed, committed, or deployed. Visual editing, isolated generated-app previews, GitHub write-back, and OCode.js deployment must not be advertised as available until their integrations are implemented and tested.
 
 - **Builder architecture and UI specification:** [docs/XBO-OCODEJS-BUILDER.md](docs/XBO-OCODEJS-BUILDER.md)
 
@@ -165,7 +165,7 @@ The API validates empty prompts and rejects messages longer than 12,000 characte
 
 The repository includes a `vercel.json` configuration for the static frontend and API functions.
 
-1. Import `zskbot/Ask OCode.js` into your hosting provider.
+1. Import `zskbot/ask-ocodejs` into your hosting provider.
 2. Configure the required environment variables in the provider's project settings.
 3. Run a preview/staging deployment first.
 4. Verify the chat API, provider credentials, and streaming behavior before promoting any release.

@@ -1,4 +1,5 @@
 import { runAgent } from '../agent/run.js';
+import { router as runChat } from '../src/router/index.js';
 
 const MAX_MESSAGES = 20;
 const MAX_CHARS = 4000;
@@ -67,12 +68,50 @@ async function handler(req, res) {
     return res.end('Gửi quá nhanh, đợi một chút rồi thử lại.');
   }
 
-  let history;
+  let payload;
   try {
-    history = toContents((await readJson(req))?.messages);
+    payload = await readJson(req);
   } catch {
-    history = null;
+    res.statusCode = 400;
+    return res.end('Dữ liệu JSON không hợp lệ.');
   }
+
+  // The browser chat client sends { message, model } and expects JSON.
+  // Keep the existing messages-based SSE agent contract for streaming clients.
+  if (typeof payload?.message === 'string' || typeof payload?.prompt === 'string') {
+    const message = String(payload.message ?? payload.prompt ?? '').trim();
+    const model = typeof payload.model === 'string' && payload.model.trim()
+      ? payload.model.trim()
+      : process.env.DEFAULT_MODEL;
+    if (!message) {
+      res.statusCode = 400;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      return res.end(JSON.stringify({ error: { code: 'INVALID_PROMPT', message: 'Nhập yêu cầu trước khi gửi.' } }));
+    }
+    if (message.length > 8000) {
+      res.statusCode = 413;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      return res.end(JSON.stringify({ error: { code: 'PROMPT_TOO_LARGE', message: 'Prompt tối đa 8000 ký tự.' } }));
+    }
+    if (model && !/^[a-z0-9._:-]{1,64}$/i.test(model)) {
+      res.statusCode = 400;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      return res.end(JSON.stringify({ error: { code: 'INVALID_PROVIDER', message: 'AI provider không hợp lệ.' } }));
+    }
+    try {
+      const response = await runChat(message, model);
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      return res.end(JSON.stringify({ success: true, response, model: model || 'default' }));
+    } catch (error) {
+      console.error('Chat request failed', { errorName: error?.name || 'Error' });
+      res.statusCode = 502;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      return res.end(JSON.stringify({ error: { code: 'AI_PROVIDER_FAILED', message: 'Không thể kết nối AI provider. Kiểm tra cấu hình backend rồi thử lại.' } }));
+    }
+  }
+
+  const history = toContents(payload?.messages);
   if (!history) {
     res.statusCode = 400;
     return res.end('Dữ liệu không hợp lệ.');
