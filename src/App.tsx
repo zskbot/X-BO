@@ -126,11 +126,10 @@ export default function App() {
 
   // User Profile & Security
   const [user, setUser] = useState<UserProfile>({
-    username: 'dev-ops-lead',
-    role: 'Senior Cloud Engineer',
-    authProvider: 'github',
-    is2FAEnabled: true,
-    repoConnected: 'watson-cloudant-etl'
+    username: 'Guest',
+    role: 'Guest profile',
+    authProvider: 'guest',
+    is2FAEnabled: false
   });
 
   // Notifications
