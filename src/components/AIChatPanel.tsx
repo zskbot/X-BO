@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { requestChat } from '../lib/xbo-chat-client.js';
 import { PlanChecklist } from './PlanChecklist.tsx';
 import { CodeProposalView } from './CodeProposalView.tsx';
-import { ArrowUp, Bot, Check, CheckCircle2, ChevronDown, Code2, Copy, Github, LayoutDashboard, ListChecks, MessageSquare, PanelLeft, Sparkles } from 'lucide-react';
+import { ArrowUp, Bot, Check, CheckCircle2, ChevronDown, Code2, Copy, Github, LayoutDashboard, ListChecks, MessageSquare, Paperclip, PanelLeft, Sparkles, X } from 'lucide-react';
 import { createBuildPlan } from '../utils/buildPlanner.js';
 
 const MODEL_OPTIONS = [
@@ -54,6 +54,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
     }
   ]);
   const [input, setInput] = useState('');
+  const [attachedFile, setAttachedFile] = useState<{ name: string; content: string } | null>(null);
   const [workspaceMode, setWorkspaceMode] = useState<'chat' | 'plan'>('chat');
   const [status, setStatus] = useState<{ type: 'info' | 'error'; text: string } | null>(null);
   const [isSending, setIsSending] = useState(false);
@@ -63,29 +64,34 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
 
   const handleSend = async () => {
     const trimmed = input.trim();
-    if (!trimmed || isSending) return;
+    if ((!trimmed && !attachedFile) || isSending) return;
+    const visibleMessage = `${trimmed}${attachedFile ? `\n\n[Tệp đính kèm: ${attachedFile.name}]` : ''}`.trim();
 
-    setMessages(prev => [...prev, { role: 'user', content: trimmed }]);
+    setMessages(prev => [...prev, { role: 'user', content: visibleMessage }]);
     setInput('');
     setIsSending(true);
     setStatus(null);
 
     try {
-      const requestMessage = workspaceMode === 'plan'
-        ? `Yêu cầu sản phẩm: ${trimmed}\n\nHãy lập kế hoạch gồm mục tiêu, giả định, file dự kiến, tác vụ theo thứ tự, kiểm thử, rủi ro/bảo mật và tiêu chí nghiệm thu. Không tuyên bố đã tạo/sửa file và không triển khai production.`
+      const promptWithAttachment = attachedFile
+        ? `${trimmed || 'Hãy đọc và phân tích tệp đính kèm.'}\n\nNỘI DUNG TỆP: ${attachedFile.name}\n\`\`\`\n${attachedFile.content}\n\`\`\``
         : trimmed;
+      const requestMessage = workspaceMode === 'plan'
+        ? `Yêu cầu sản phẩm: ${promptWithAttachment}\n\nHãy lập kế hoạch gồm mục tiêu, giả định, file dự kiến, tác vụ theo thứ tự, kiểm thử, rủi ro/bảo mật và tiêu chí nghiệm thu. Không tuyên bố đã tạo/sửa file và không triển khai production.`
+        : promptWithAttachment;
       const content = await requestChat({
         message: requestMessage,
         model: selectedModel,
         apiBase: import.meta.env.VITE_API_BASE_URL || ''
       });
       setMessages(prev => [...prev, { role: 'assistant', content, workspaceMode }]);
+      setAttachedFile(null);
       setStatus({ type: 'info', text: workspaceMode === 'plan' ? 'Đã nhận kế hoạch đề xuất; chưa sửa file hay triển khai.' : 'Đã nhận phản hồi từ agent.' });
     } catch (err) {
       // Keep the prompt available for retry without leaving a duplicate failed message in history.
       setMessages(prev => {
         const lastMessage = prev[prev.length - 1];
-        return lastMessage?.role === 'user' && lastMessage.content === trimmed
+        return lastMessage?.role === 'user' && lastMessage.content === visibleMessage
           ? prev.slice(0, -1)
           : prev;
       });
@@ -105,6 +111,28 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
       setStatus({ type: 'error', text: 'Không thể truy cập clipboard. Hãy chọn và sao chép nội dung thủ công.' });
     }
   };
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    const allowed = /\\.(txt|md|mdx|json|csv|tsv|js|jsx|ts|tsx|html|css|scss|xml|yaml|yml|toml|ini|log|py|go|rs|java|sql|sh|env|diff|patch)$/i;
+    if (!allowed.test(file.name)) {
+      setStatus({ type: 'error', text: 'Tệp chưa được hỗ trợ. Hãy chọn tệp văn bản, Markdown, CSV, JSON hoặc mã nguồn.' });
+      return;
+    }
+    if (file.size > 1024 * 1024) {
+      setStatus({ type: 'error', text: 'Tệp vượt giới hạn 1 MB. Hãy chọn tệp nhỏ hơn.' });
+      return;
+    }
+    try {
+      const content = await file.text();
+      setAttachedFile({ name: file.name, content });
+      setStatus({ type: 'info', text: `Đã đính kèm ${file.name}; nội dung sẽ được gửi cho agent.` });
+    } catch {
+      setStatus({ type: 'error', text: 'Không đọc được tệp. Hãy thử tệp văn bản UTF-8.' });
+    }
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
@@ -161,9 +189,11 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
                   className="ocode-prompt-input" />
                 <div className="ocode-prompt-toolbar">
                   <div className="flex min-w-0 flex-wrap items-center gap-2">
+                    <label className="inline-flex cursor-pointer items-center gap-1.5 border border-white/10 px-3 py-2 text-xs text-neutral-300 transition hover:border-indigo-300/40 hover:text-white" title="Đính kèm tệp văn bản cho agent"><Paperclip size={14} /> <span>Úp file</span><input type="file" className="sr-only" accept=".txt,.md,.mdx,.json,.csv,.tsv,.js,.jsx,.ts,.tsx,.html,.css,.scss,.xml,.yaml,.yml,.toml,.ini,.log,.py,.go,.rs,.java,.sql,.sh,.env,.diff,.patch" onChange={handleFileChange} /></label>
+                    {attachedFile && <span className="max-w-[150px] truncate text-xs text-indigo-200" title={attachedFile.name}>{attachedFile.name}<button type="button" onClick={() => setAttachedFile(null)} className="ml-1 inline-flex align-middle" aria-label="Bỏ tệp đính kèm"><X size={12} /></button></span>}
                     <span className="ocode-prompt-hint hidden sm:inline">⌘/Ctrl + Enter để gửi</span>
                   </div>
-                  <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending}
+                  <button type="button" onClick={() => void handleSend()} disabled={(!input.trim() && !attachedFile) || isSending}
                     className="ocode-send-button" aria-label={isSending ? 'Đang gửi yêu cầu' : 'Gửi yêu cầu'}>
                     {isSending ? 'Đang gửi...' : <><span className="hidden sm:inline">Bắt đầu</span><ArrowUp size={18} /></>}
                   </button>
@@ -202,11 +232,13 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({ selectedModel, onSelec
       {!isWelcome && (
         <div className="border-t border-white/10 bg-[#090b13] px-4 py-4 sm:px-8">
           {status && <div role={status.type === 'error' ? 'alert' : 'status'} className={`mx-auto mb-3 max-w-4xl border px-3 py-2 text-xs ${status.type === 'error' ? 'border-rose-500/30 bg-rose-950/30 text-rose-200' : 'border-white/10 bg-white/[0.03] text-neutral-400'}`}>{status.text}</div>}
+          {attachedFile && <div className="mx-auto mb-2 flex max-w-4xl items-center gap-2 text-xs text-indigo-200"><Paperclip size={14} /><span className="truncate">{attachedFile.name}</span><button type="button" onClick={() => setAttachedFile(null)} aria-label="Bỏ tệp đính kèm"><X size={13} /></button></div>}
           <div className="mx-auto flex max-w-4xl items-end gap-2 border border-white/10 bg-[#0c0f18] p-2 focus-within:border-indigo-400/40">
+            <label className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center border border-white/10 px-3 text-neutral-300 hover:border-indigo-300/40" title="Đính kèm tệp cho agent" aria-label="Úp file cho agent"><Paperclip size={17} /><input type="file" className="sr-only" accept=".txt,.md,.mdx,.json,.csv,.tsv,.js,.jsx,.ts,.tsx,.html,.css,.scss,.xml,.yaml,.yml,.toml,.ini,.log,.py,.go,.rs,.java,.sql,.sh,.env,.diff,.patch" onChange={handleFileChange} /></label>
             <textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
               placeholder="Tiếp tục yêu cầu hoặc tinh chỉnh ứng dụng..." aria-label="Tin nhắn cho Agents" maxLength={8000}
               className="max-h-40 min-h-12 flex-1 resize-y bg-transparent px-2 py-2 text-sm text-white outline-none placeholder:text-neutral-600" />
-            <button type="button" onClick={() => void handleSend()} disabled={!input.trim() || isSending} aria-label="Gửi yêu cầu"
+            <button type="button" onClick={() => void handleSend()} disabled={(!input.trim() && !attachedFile) || isSending} aria-label="Gửi yêu cầu"
               className="flex h-10 shrink-0 items-center gap-2 bg-indigo-400 px-3 text-xs font-semibold text-[#080a10] hover:bg-indigo-300 disabled:opacity-40">
               <ArrowUp size={16} /><span className="hidden sm:inline">{isSending ? 'Đang gửi' : 'Gửi'}</span>
             </button>
