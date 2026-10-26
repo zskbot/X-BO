@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, Github, Mail, ShieldCheck, AlertCircle, LoaderCircle } from 'lucide-react';
+import { X, Github, Mail, ShieldCheck, AlertCircle } from 'lucide-react';
 import { UserProfile } from '../types/shell';
 
 interface AuthModalProps {
