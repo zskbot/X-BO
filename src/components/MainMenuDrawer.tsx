@@ -22,7 +22,8 @@ import {
   Database,
   Trash2,
   CheckCircle2,
-  BarChart2
+  BarChart2,
+  ShieldCheck
 } from 'lucide-react';
 import { ProjectFile, SavedSession, WatsonMetrics, UserProfile } from '../types/shell';
 import { getConfidenceTheme } from '../utils/syntaxHighlighting';
