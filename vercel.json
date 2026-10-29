@@ -31,6 +31,10 @@
       "dest": "/api/health.js"
     },
     {
+      "src": "/OCodejs/(.*)",
+      "dest": "/$1"
+    },
+    {
       "handle": "filesystem"
     },
     {
