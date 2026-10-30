@@ -5,9 +5,9 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    // GitHub Pages publishes this project at /ask-ocodejs/, not at the domain root.
-    // VITE_BASE_PATH can be overridden for previews or other hosting providers.
-    base: process.env.VITE_BASE_PATH || '/ask-ocodejs/',
+    // Vercel serves this app from the domain root. Set VITE_BASE_PATH=/ask-ocodejs/
+    // only for GitHub Pages or another host that publishes under a subpath.
+    base: process.env.VITE_BASE_PATH || '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
